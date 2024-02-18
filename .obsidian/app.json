@@ -1,0 +1,10 @@
+{
+  "promptDelete": false,
+  "propertiesInDocument": "hidden",
+  "strictLineBreaks": false,
+  "readableLineLength": true,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "attachmentFolderPath": "Context/Images",
+  "newFileLocation": "current"
+}
