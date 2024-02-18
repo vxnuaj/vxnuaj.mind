@@ -4,12 +4,10 @@ In the matrix, the number of rows represents the number of neurons at the curren
 
 For example, a weighted matrix with dimensionality of 3x3, 
 
-$[w_1,w_2,w_3]$
-$[w_4,w_5,w_6]$
-$[w_7,w_8,w_9]$
+$[W_1,W_2,W_3]$
+$[W_4,W_5,W_6]$
+$[W_7,W_8,W_9]$
 
 indicates that the current layer has a size of 3, taking in data from 3 different neurons.
 
-This weighted matrix is multiplied by by each individual value from the 3 different input neurons. A [[bias]] parameter is added to the result in order to calculate the weighted sum
-
-$x * w$
+This weighted matrix is multiplied by by each individual value from the 3 different input neurons. A [[bias]] parameter is added to the result in order to calculate the [[weighted sum]].
