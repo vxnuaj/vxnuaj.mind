@@ -72,13 +72,22 @@
               "type": "mk-path-view",
               "state": {}
             }
+          },
+          {
+            "id": "2efd335434a19f42",
+            "type": "leaf",
+            "state": {
+              "type": "mk-path-view",
+              "state": {}
+            }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 217.5,
+    "collapsed": true
   },
   "right": {
     "id": "eff3b73c380d480c",
@@ -159,14 +168,21 @@
                 "file": "creation/tech/BCI.md"
               }
             }
+          },
+          {
+            "id": "444df1e80e2c7768",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {

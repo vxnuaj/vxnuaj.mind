@@ -90,7 +90,9 @@
     "//https:",
     "//creation/creation/tech",
     "//creation/creation/tech",
-    "//creation"
+    "//creation",
+    "//Spaces",
+    "//Spaces/Spaces/Home"
   ],
   "expandFolderOnClick": true,
   "menuTriggerChar": "/",

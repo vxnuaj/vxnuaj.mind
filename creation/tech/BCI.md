@@ -1,0 +1,4 @@
+---
+sticker: lucide//brain
+---
+Hey
