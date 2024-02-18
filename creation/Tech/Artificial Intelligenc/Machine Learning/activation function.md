@@ -1,0 +1,1 @@
+An activation function is how the weighted sum of the input is transferred from an input to out
