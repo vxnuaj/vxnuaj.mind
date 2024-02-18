@@ -1,4 +1,3 @@
 ---
 sticker: lucide//brain
 ---
-Hey

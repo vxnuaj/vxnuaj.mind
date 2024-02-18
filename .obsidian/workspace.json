@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "creation/tech/BCI.md",
+                "file": "body/Training.md",
                 "mode": "source",
                 "source": false
               }
@@ -82,12 +82,11 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 217.5,
-    "collapsed": true
+    "width": 217.5
   },
   "right": {
     "id": "eff3b73c380d480c",
@@ -103,7 +102,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "creation/tech/BCI.md",
+                "file": "body/Training.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,7 +119,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "creation/tech/BCI.md",
+                "file": "body/Training.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -143,7 +142,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "creation/tech/BCI.md"
+                "file": "body/Training.md"
               }
             }
           },
@@ -165,7 +164,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "creation/tech/BCI.md"
+                "file": "body/Training.md"
               }
             }
           },
@@ -182,7 +181,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -196,6 +196,11 @@
   },
   "active": "670e23340d0c1112",
   "lastOpenFiles": [
+    "Untitled.md",
+    "body/Training.md",
+    ".gitignore.md",
+    "body/.gitignore.md",
+    "Untitled",
     "creation/tech/BCI.md",
     "Spaces/Home",
     "Spaces",
@@ -211,7 +216,6 @@
     "creation/.md",
     "body.md",
     "creation",
-    "mind",
     "VISION/@ JUNE 2023/CREATION.J23.md",
     "VISION/@ JUNE 2023/BODY.J23.md",
     "VISION/@ JUNE 2023/@ JUNE 2023.md",
@@ -230,9 +234,6 @@
     "LIBRARY/TECH/ARTIFICIAL INTELLIGENCE/MACHINE LEARNING/SUPERVISED LEARNING/Classification.md",
     "LIBRARY/TECH/ARTIFICIAL INTELLIGENCE/MACHINE LEARNING/SUPERVISED LEARNING/Regression.md",
     "VISION/@ JUNE 2023/MIND.J23.md",
-    "VISION/LIF3 TERM/CREATION.md",
-    "LIBRARY/TECH/ELECTRICAL ENGINEERING/SIGNAL PROCESSING/Phase Distortion.md",
-    "LIBRARY/TECH/ELECTRICAL ENGINEERING/ELECTRICAL ENGINEERING.md",
     "Context/Images/Screenshot 2023-11-11 at 8.34.57 PM.png",
     "Context/Images/Screenshot 2023-11-11 at 9.38.56 AM.png",
     "Context/Images/Screenshot 2023-11-11 at 6.09.45 PM.png",
