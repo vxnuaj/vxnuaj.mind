@@ -1,0 +1,1 @@
+Transforms the labels of a dataset into vectors of 0s and 1s.
