@@ -26,7 +26,7 @@ You should get something similar, if not the same, to this
 
 
 ```
-train_data = np.array(train_data) #Converting our CSV into a NumPy Array
+train_data = np.array(train_data)
 Y_train = train_data[:,0] #Getting our training labels
 X_train = train_data[:,1:] #Getting our training data
 ```
@@ -109,4 +109,6 @@ def one_hot(Y):
     return one_hot_Y
 ```
 
+Within the function `one_hot()`, we'll take in the training labels `Y_train`. 
 
+A NumPy array with the shape of 
