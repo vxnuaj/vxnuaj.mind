@@ -27,11 +27,14 @@ You should get something similar, if not the same, to this
 
 ```
 train_data = np.array(train_data) #Converting our CSV into a NumPy Array
-train_labels = train_data[:,0] #Getting our training labels
-train_features = train_data[:,1:] #Getting our training data
+Y_train = train_data[:,0] #Getting our training labels
+X_train = train_data[:,1:] #Getting our training data
 ```
 
 We convert our csv file into a NumPy Array and slice the NumPy array to split the training labels and training features.
+
+`Y_train` are the labels of our training data.
+`X_train` is the actual training data.
 
 ```
 def init_params():
@@ -86,7 +89,7 @@ def forward(w1, b1, w2, b2, X):
 	return z1, a1, z2, a2
 ```
 
-Here, $z_1$, the [[weighted sum]] of each neuron in the first layer, is computed by taking the dot product of [[weighted matrix]] `W1` and `X` which represents the original input of `784` pixels.
+Here, `z1`, the [[weighted sum]] of each neuron in the first layer, is computed by taking the dot product of [[weighted matrix]] `W1` and `X` which represents the original input of `784` pixels.
 
 Afterward, `A1`, the final output(s) of the 1st layer, is calculated by applying our [[ReLU]] activation function onto the [[weighted sum]] `Z1`.
 
@@ -94,7 +97,9 @@ $z_2$, the [[weighted sum]] of each neuron in the second layer is computed as th
 
 We get our final output, `A2` by applying non-linearity through the [[SoftMax]] [[activation function]].
 
-Now the dataset will be taken and through [[one-hot encoding]], will be transformed into numeric
+Now the dataset will be taken and through [[one-hot encoding]], will be transformed into numerical data of vectors of 0s and 1s.
+
+This is done in order to allow for our [[neural network]] to interpret the dataset.
 
 ```
 def one_hot(Y):
@@ -103,3 +108,5 @@ def one_hot(Y):
     one_hot_Y = one_hot_Y.T
     return one_hot_Y
 ```
+
+
