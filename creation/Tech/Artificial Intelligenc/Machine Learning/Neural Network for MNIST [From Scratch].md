@@ -1,3 +1,6 @@
+---
+{}
+---
 Dependences are imported for the program
 
 ```
@@ -33,7 +36,6 @@ train_features = train_data[:,1:] #Getting our training data
 
 We convert our csv file into a NumPy Array and slice the NumPy array to split the training labels and training features.
 
-
 ```
 def init_params():
     w1 = np.random.rand(32, 784) # W matrix 1 of 32 (neurons) x 784 (inputs)
@@ -45,14 +47,36 @@ def init_params():
 
 The initial parameters, [[weights]] and [[bias]], for our function alongside the number of neurons are defined.
 
-Our network will have an input layer of 784 Neurons, as each image within the MNIST dataset consists of 784 pixels.
+Our network will have an input layer of `784` Neurons, as each image within the MNIST dataset consists of `784` pixels.
 
 ![[MNIST Sample.png| Images just like these]]
 
-It will have a hidden layer of 32 neurons. So, hence `W1`, it represents the [[weighted matrix]] of the [[hidden layer]] taking in `784` input neurons and outputting `32` values from it's `32` neurons.
+It will have a hidden layer of `32` neurons. So, hence `W1`, it represents the [[weighted matrix]] of the [[hidden layer]] taking in `784` input neurons and outputting `32` values from it's `32` neurons.
 
-A [[bias]] vector, `b1` is created of a length of `784` to accommodate for each `784` neuron. Each [[bias]] will be added to the multiplication of [[weight]] $W_i$ and output $x_i$, where $i$ is the $ith$ neuron.
+A [[bias]] vector, `b1` is created of a length of `784` to accommodate for each `784` neuron. Each [[bias]] will be added to the multiplication of [[weight]] $W_i$ and output $x_i$, where $i$ is the $ith$ neuron, as part of the [[weighted sum]] calculation.
 
-The output layer will take in `32` values from the previous `32` neurons. It will consist of `10` neurons, outputting `10` final values.
+The output layer will take in `32` values from the previous `32` neurons. It will consist of `10` neurons, outputting `10` final values. `W2` is defined according to those parameters.
+
+A [[bias]] vector, `b2`, is created this time with a length of `32` to accommodate for the `32` neurons in the output layer.
+
+We create the [[bias]] using `np.zeros` just as a means of initializing the model parameters. It will change as we train out network.
+
+The same concept is done with the [[weight]]s, instead using `np.random.rand`
+
+Prior to defining the forward function, we define our [[activation function]]s.
+We'll be using [[ReLU]] and [[SoftMax]].
+
+```
+def relu(z):
+    return np.maximum(z,0)
+
+def softmax(z):
+    return (np.exp(x)/np.exp(x).sum())
+```
+
+In NumPy, the ReLU activation function can be defined by using the np.maximum function, with parameters `z,0`.
+
+The SoftMax function can be defined through $e^x$
+
 
 

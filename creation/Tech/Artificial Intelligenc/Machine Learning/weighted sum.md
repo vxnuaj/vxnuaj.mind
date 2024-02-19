@@ -7,3 +7,5 @@ where
 - $i$ is the index of each neuron
 - $W_i$ is the [[weights]] at $ith$ index
 - $b$ is the [[bias]] parameter
+
+The output $z$ is applied to an [[activation function]] to get the final output of a neuron. 
