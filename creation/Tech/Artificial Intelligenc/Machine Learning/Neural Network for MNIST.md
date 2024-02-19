@@ -94,3 +94,12 @@ $z_2$, the [[weighted sum]] of each neuron in the second layer is computed as th
 
 We get our final output, `A2` by applying non-linearity through the [[SoftMax]] [[activation function]].
 
+Now the dataset will be taken and through [[one-hot encoding]], will be transformed into numeric
+
+```
+def one_hot(Y):
+    one_hot_Y = np.zeros((Y.size, Y.max() + 1))
+    one_hot_Y[np.arange(Y.size), Y] = 1
+    one_hot_Y = one_hot_Y.T
+    return one_hot_Y
+```
