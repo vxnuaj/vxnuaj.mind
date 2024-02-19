@@ -95,5 +95,5 @@ Afterward, `A1`, the final output(s) of the 1st layer, is calculated by applying
 
 $z_2$, the [[weighted sum]] of each neuron in the second layer is computed as the dot product of [[weighted matrix]], `W2`, and `A1`. 
 
-We get our final output by applying non-linearity through the [[SoftMax]] [[activation function]].
+We get our final output, `A2` by applying non-linearity through the [[SoftMax]] [[activation function]].
 
