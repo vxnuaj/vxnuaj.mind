@@ -84,10 +84,16 @@ Now, the forward function can be defined.
 def forward(w1, b1, w2, b2, X):
     z1 = np.dot(w1,X) + b1.reshape(-1,1) 
     a1 = relu(z1)
-    z2 = np.dot(w2,X) + b2.reshape(-1,1)
+    z2 = np.dot(w2, a1) + b2.reshape(-1,1)
     a2 = softmax(z1)
 	return z1, a1, z2, a2
 ```
 
-Here, $z_1$, the weighted sum of each neuron in the first layer, is computed by taking the dot product of matrix `W1` and `X` which represents the original input of `784` pixels.
+Here, $z_1$, the [[weighted sum]] of each neuron in the first layer, is computed by taking the dot product of [[weighted matrix]] `W1` and `X` which represents the original input of `784` pixels.
+
+Afterward, `A1`, the final output(s) of the 1st layer, is calculated by applying our [[ReLU]] activation function onto the [[weighted sum]] `Z1`.
+
+$z_2$, the [[weighted sum]] of each neuron in the second layer is computed as the dot product of [[weighted matrix]], `W2`, and `A1`. 
+
+We get our final output by applying non-linearity through the [[SoftMax]] [[activation function]].
 
