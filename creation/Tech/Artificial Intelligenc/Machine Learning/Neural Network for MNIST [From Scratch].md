@@ -45,4 +45,14 @@ def init_params():
 
 The initial parameters, [[weights]] and [[bias]], for our function alongside the number of neurons are defined.
 
-Our network will have an input layer of 784 Neurons, a hidden layer of 32 neurons, hence `W1`, as it represents the weighted matrix of the hidden layer taking in `784` neurons and outputting `32` value
+Our network will have an input layer of 784 Neurons, as each image within the MNIST dataset consists of 784 pixels.
+
+![[MNIST Sample.png| Images just like these]]
+
+It will have a hidden layer of 32 neurons. So, hence `W1`, it represents the [[weighted matrix]] of the [[hidden layer]] taking in `784` input neurons and outputting `32` values from it's `32` neurons.
+
+A [[bias]] vector, `b1` is created of a length of `784` to accommodate for each `784` neuron. Each [[bias]] will be added to the multiplication of [[weight]] $W_i$ and output $x_i$, where $i$ is the $ith$ neuron.
+
+The output layer will take in `32` values from the previous `32` neurons. It will consist of `10` neurons, outputting `10` final values.
+
+
