@@ -4,6 +4,9 @@ A loss function quantifies the error between the output of a [[neural network]] 
 
 If the prediction of a model is completely off, the loss function will output a higher number. If the prediction is fairly accurate, the loss function will output a lower number.
 
-It serves as a gauge to tell if our model is improving or not.
+It serves as a gauge to tell if our [[neural network]] is improving or not.
 
-For example, if you 
+Some types of loss functions include
+- [[mean squared error]]
+- [[binary cross entropy]]
+- [[huber loss]]
