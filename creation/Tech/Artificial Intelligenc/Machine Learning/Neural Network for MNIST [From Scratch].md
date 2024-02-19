@@ -76,7 +76,18 @@ def softmax(z):
 
 In NumPy, the ReLU activation function can be defined by using the np.maximum function, with parameters `z,0`.
 
-The SoftMax function can be defined through the equation $\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}$, where $z_i$ is the [[weighted sum]] of the $ith$ neuron, $j$ is each index of each value within the weighted sum, & $n$ is the total size of the [[weighted sum]]
+The SoftMax function can be defined through the equation $\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}$, which is what `np.exp(x)/np.exp(x).sum()` defines
 
+Now, the forward function can be defined.
 
+```
+def forward(w1, b1, w2, b2, X):
+    z1 = np.dot(w1,X) + b1.reshape(-1,1) 
+    a1 = relu(z1)
+    z2 = np.dot(w2,X) + b2.reshape(-1,1)
+    a2 = softmax(z1)
+	return z1, a1, z2, a2
+```
+
+Here, $z_1$, the weighted sum of each neuron in the first layer, is computed by taking the dot product of matrix `W1` and `X` which represents the original input of `784` pixels.
 
