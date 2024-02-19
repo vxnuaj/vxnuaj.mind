@@ -76,7 +76,7 @@ def softmax(z):
 
 In NumPy, the ReLU activation function can be defined by using the np.maximum function, with parameters `z,0`.
 
-The SoftMax function can be defined through $e^x$
+The SoftMax function can be defined through the equation $\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}$, where $z_i$ is the [[weighted sum]] of the $ith$ neuron, $j$ is each index of each value within the weighted sum, & $n$ is the total size of the [[weighted sum]]
 
 
 

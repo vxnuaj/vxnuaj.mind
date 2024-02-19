@@ -8,7 +8,7 @@ It's applied to the weighted sum of a given neuron.
 
 For example, If [[weighted sum]] is $z$ and we want to use [[ReLU]],
 
-$a = ReLU(z)$
+$a_i = ReLU(z_i)$
 
 where a is the output of $ith$ [[weighted sum]] applied onto [[ReLU]]
 
