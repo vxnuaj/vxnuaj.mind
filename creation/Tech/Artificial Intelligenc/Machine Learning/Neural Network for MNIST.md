@@ -111,4 +111,4 @@ def one_hot(Y):
 
 Within the function `one_hot()`, we'll take in the training labels `Y_train`. 
 
-A NumPy array with the shape of 
+A NumPy array with the dimensionality of `(Y.size, Y.max() + 1)`, where `Y.size` are the rows of the array representing the total 
