@@ -1,11 +1,11 @@
 Hey 👋
 
-Here, I write notes on what I'm currently learning about, which may include _**Artificial Intelligence, Brain Computer Interfaces, Epistemology, Stoicism, Training methodologies (running), etc. **_
+Here, I write notes on what I'm currently learning about, which may include _**Artificial Intelligence, Brain Computer Interfaces, Epistemology, Stoicism, Training methodologies (running), etc._
 
 Feel free to check my notes out!
 
-Currently, I'm building knowledge and skills surrounding Artificial Intelligence and Neurotech, you'll see the following sections to be more active:
+Currently, I'm building knowledge and skills surrounding Machine Learning and Neurotech, you'll see the following sections to be more active:
 
-- [Artificial Intelligence]()
-- [Brain Computer Interface]()
+- [Machine Learning](https://github.com/vxnuaj/vxnuaj.mind/tree/main/creation/Tech/Artificial%20Intelligenc/Machine%20Learning)
+- [Brain Computer Interface](https://github.com/vxnuaj/vxnuaj.mind/tree/main/creation/Tech/Brain%20Computer%20Interface)
 
