@@ -6,6 +6,6 @@ Feel free to check my notes out!
 
 Currently, I'm building knowledge and skills surrounding Machine Learning and Neurotech, you'll see the following sections to be more active:
 
-- [Machine Learning](https://github.com/vxnuaj/vxnuaj.mind/tree/main/creation/Tech/Artificial%20Intelligenc/Machine%20Learning)
+- [Machine Learning](https://github.com/vxnuaj/vxnuaj.mind/tree/main/creation/Tech/Artificial%20Intelligence/Machine%20Learning)
 - [Brain Computer Interface](https://github.com/vxnuaj/vxnuaj.mind/tree/main/creation/Tech/Brain%20Computer%20Interface)
 
