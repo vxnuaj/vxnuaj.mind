@@ -146,3 +146,8 @@ $[0,1,0,0,0,0,0,0,0,0]$
 $[0,0,0,0,0,0,0,0,0,1]$
 
 Then our `one_hot_y` array is transposed per `np.T`, and our function returns the `one_hot_y`.
+
+
+### Next Steps
+- [ ] Define Categorical Cross Entropy
+- [ ] Define Back Propagation
