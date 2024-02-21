@@ -111,4 +111,21 @@ def one_hot(Y):
 
 Within the function `one_hot()`, we'll take in the training labels `Y_train`. 
 
-A NumPy array with the dimensionality of `(Y.size, Y.max() + 1)`, where `Y.size` are the rows of the array representing the total 
+We create NumPy array filled with 0s with a dimensionality of `(Y.size, Y.max() + 1)`, where `Y.size` is the total # of labels in our training set defining the total # of digits in our MNIST training set. `Y.max()`, defines the largest value of our training set `Y`, which in the case of MNIST database, is 9.
+
+Now in the MNIST dataset, 0-9 accounts for `10` digits, if you count 0.
+Therefore, we must `+1` to `Y.max()` in order to ensure that our array will account for all digits in the MNIST dataset.
+
+Our NumPy array of 0s will have the dimensionality of `(60000, 10)`, as our dataset holds `60000` digits ranging from 0 to `9`.
+
+Now, using `np.arange` we create an array of length `Y.size`, which in our case, will be `60000`, as our training set holds `60000` digits. It holds values ranging from 0 to 60000.
+
+Like this: $[0,1, 2, 3, ... 59998, 59999, 60000]$
+
+Our `one_hot_y` array of `np.zeros` will be indexed using `np.arange(Y.size)` and `Y`. 
+
+Essentially, what we're doing is for every value $i$ in `np.arange(Y.size)`, we take $i$ and the label `Y`, index our `one_hot_Y` array, and assign that specific indice `0` to `1`.
+
+The value `Y` depends on which image is fed into the network.
+If we feed in an image that represents the digit 5, value `Y` will be 6, representing the 6th indice of label array `Y`, $[0,1,2,3,4,5,}6|,7,8,9,]$
+ 
