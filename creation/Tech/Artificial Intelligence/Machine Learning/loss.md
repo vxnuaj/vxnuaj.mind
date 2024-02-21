@@ -1,0 +1,1 @@
+The loss represents the error margin between a mode's prediction and the actual target value.

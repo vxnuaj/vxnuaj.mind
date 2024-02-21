@@ -85,7 +85,7 @@ def forward(w1, b1, w2, b2, X):
     z1 = np.dot(w1,X) + b1.reshape(-1,1) 
     a1 = relu(z1)
     z2 = np.dot(w2, a1) + b2.reshape(-1,1)
-    a2 = softmax(z1)
+    a2 = softmax(z2)
 	return z1, a1, z2, a2
 ```
 
@@ -93,9 +93,9 @@ Here, `z1`, the [[weighted sum]] of each neuron in the first layer, is computed 
 
 Afterward, `A1`, the final output(s) of the 1st layer, is calculated by applying our [[ReLU]] activation function onto the [[weighted sum]] `Z1`.
 
-$z_2$, the [[weighted sum]] of each neuron in the second layer is computed as the dot product of [[weighted matrix]], `W2`, and `A1`. 
+`z2`, the [[weighted sum]] of each neuron in the second layer is computed as the dot product of [[weighted matrix]], `W2`, and `A1`. 
 
-We get our final output, `A2` by applying non-linearity through the [[SoftMax]] [[activation function]].
+We get our final output, `A2` by applying non-linearity to `z2` through the [[SoftMax]] [[activation function]].
 
 Now the dataset will be taken and through [[one-hot encoding]], will be transformed into numerical data of vectors of 0s and 1s.
 
@@ -126,6 +126,23 @@ Our `one_hot_y` array of `np.zeros` will be indexed using `np.arange(Y.size)` an
 
 Essentially, what we're doing is for every value $i$ in `np.arange(Y.size)`, we take $i$ and the label `Y`, index our `one_hot_Y` array, and assign that specific indice `0` to `1`.
 
-The value `Y` depends on which image is fed into the network.
-If we feed in an image that represents the digit 5, value `Y` will be 6, representing the 6th indice of label array `Y`, $[0,1,2,3,4,5,}6|,7,8,9,]$
- 
+The value `Y` is dependent on which image is fed into the network.
+If we feed in an image that represents the digit 5, `Y` will be 5, representing the 5th indice of label array `Y`, $[0,1,2,3,4,|5|,6,7,8,9,]$
+
+So if we ran this function for the first 5 digits in the MNIST dataset,
+
+$[5]$
+$[0]$
+$[4]$
+$[1]$
+$[9]$
+
+our `one_hot_y` encoded array would look something like this:
+
+$[0,0,0,0,1,0,0,0,0,0]$
+$[1,0,0,0,0,0,0,0,0,0]$
+$[0,0,0,0,1,0,0,0,0,0]$
+$[0,1,0,0,0,0,0,0,0,0]$
+$[0,0,0,0,0,0,0,0,0,1]$
+
+Then our `one_hot_y` array is transposed per `np.T`, and our function returns the `one_hot_y`.

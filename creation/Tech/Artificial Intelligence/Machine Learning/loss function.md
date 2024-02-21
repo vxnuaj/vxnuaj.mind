@@ -1,4 +1,4 @@
-It's a method of evaluating how well a model is suited or trained for the intended task.
+It's a method of evaluating how well a model is suited or trained for the intended task by calculating the [[loss]] of an output.
 
 A loss function quantifies the error between the output of a [[neural network]] and intended output.
 
@@ -9,4 +9,5 @@ It serves as a gauge to tell if our [[neural network]] is improving or not.
 Some types of loss functions include
 - [[mean squared error]]
 - [[binary cross entropy]]
+- [[categorical cross entropy]]
 - [[huber loss]]
