@@ -1,3 +1,7 @@
+---
+created: 2024-02-20T14:17
+Last Updated: 02-20-2024 | 2:30
+---
 Hey 👋
 
 Here, I write notes on what I'm currently learning about, which may include _**Artificial Intelligence, Brain Computer Interfaces, Epistemology, Stoicism, Training methodologies (running), etc._

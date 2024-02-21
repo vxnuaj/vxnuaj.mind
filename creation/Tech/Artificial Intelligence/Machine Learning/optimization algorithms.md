@@ -1,1 +1,0 @@
-An optimization algorithm is an algorithm used to train [[deep learning]] models, allowing to update the model parameters to minimize the value of the [[loss function]] through [[backpro]]

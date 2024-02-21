@@ -1,3 +1,7 @@
+---
+created: 2024-02-18T15:04
+Last Updated: 02-19-2024 | 11:15
+---
 The calculation of the $\sum$ of the multiplication of the [[weights]] and input with the addition of a [[bias]].
 
 $z = \sum_{i=1}^{n}W_i*x_{i}+ b$,

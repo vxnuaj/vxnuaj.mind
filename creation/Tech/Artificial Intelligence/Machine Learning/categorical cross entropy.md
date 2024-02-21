@@ -1,3 +1,7 @@
+---
+created: 2024-02-20T21:51
+Last Updated: 02-20-2024 | 10:58
+---
 Categorical Cross Entropy Loss is a [[loss function]] which calculates the [[loss]] of a model's output.
 
 It's specifically designed for multi-class classification tasks where each input belongs exactly to one class.

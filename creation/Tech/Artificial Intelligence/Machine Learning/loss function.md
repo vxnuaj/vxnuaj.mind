@@ -1,3 +1,7 @@
+---
+created: 2024-02-19T12:09
+Last Updated: 02-21-2024 | 1:26
+---
 A loss function quantifies the error, also known as [[loss]], between the output of a [[neural network]] and intended output.
 
 If the prediction of a model is completely off, the loss function will output a higher number. If the prediction is fairly accurate, the loss function will output a lower number.
