@@ -1,6 +1,6 @@
 ---
 created: 2024-02-20T21:51
-Last Updated: 02-20-2024 | 10:58
+Last Updated: 02-21-2024 | 8:34 PM
 ---
 Categorical Cross Entropy Loss is a [[loss function]] which calculates the [[loss]] of a model's output.
 
@@ -11,8 +11,8 @@ The equation is defined as
 $CE = -\sum_{i=1}^{N}y_{i}·log(\hat{y_i})$
 
 where,
-- $\hat{y}_i$ is the prediction of a model as $ith$ class
-- $y_i$ represents the one hot encoded vector of $ith$ class
+- $\hat{y}_i$ is the predicted probability for $ith$ class in the dataset given by the model
+- $y_i$ represents the one hot encoded vector of $ith$ class label
 - Index $i$ denotes the index of the $ith$ class of a dataset
 - $N$ denotes the total number of classes in the dataset / [[one-hot encoding]] vector.
 

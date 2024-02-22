@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T12:09
-Last Updated: 02-21-2024 | 1:26
+Last Updated: 02-21-2024 | 1:26 PM
 ---
 A loss function quantifies the error, also known as [[loss]], between the output of a [[neural network]] and intended output.
 

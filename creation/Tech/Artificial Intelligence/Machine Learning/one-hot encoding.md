@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T13:03
-Last Updated: 02-20-2024 | 9:33
+Last Updated: 02-20-2024 | 9:33 PM
 ---
 One-hot encoding transforms the labels of a dataset into vectors of 0s and 1s, to allow for a model to more easily interpret & then classify pieces of data.
 

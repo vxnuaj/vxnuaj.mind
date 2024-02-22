@@ -1,6 +1,6 @@
 ---
 created: 2024-02-18T14:50
-Last Updated: 02-19-2024 | 1:03
+Last Updated: 02-19-2024 | 1:03 PM
 ---
  The weighted matrix of a neuron, through it's individual [[weights]], $W_i$, allows for the calculation of the [[weighted sum]] through multiplying $W_i$ with the respective input value
 
