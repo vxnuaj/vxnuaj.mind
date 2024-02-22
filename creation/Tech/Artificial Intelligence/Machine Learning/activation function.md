@@ -1,8 +1,8 @@
 ---
 created: 2024-02-18T15:31
-Last Updated: 02-19-2024 | 11:28 AM
+Last Updated: 02-21-2024 | 9:38 PM
 ---
-An activation function is how the weighted sum of the input is transferred into a discernible output for the next layer.
+Used during [[forward propagation]] of a [[neural network]], an activation function is how the [[weighted sum ]]of the input is transferred into a discernible output for the next layer.
 
 The choice of a specific activation functions can determine how the network ultimately performs its task. 
 
