@@ -1,5 +1,5 @@
 ---
-Last Updated: 02-21-2024 | 10:42 PM
+Last Updated: 02-21-2024 | 10:43 PM
 ---
 ## Vanilla Neural Networks 02/19 → Present
 #### Building and Understanding a [[Neural Network for MNIST]] dataset, from scratch using only NumPy
@@ -11,9 +11,5 @@ Last Updated: 02-21-2024 | 10:42 PM
 **Outcomes and Learnings**: 
 
 
-#### Hey
-:)
 
 
-## Conv Neural Nets
-:)
