@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-21-2024 | 12:53 noon
+Last Updated: 02-22-2024 | 9:11 PM
 ---
 Dependences are imported for the program
 
@@ -151,6 +151,11 @@ $[0,0,0,0,0,0,0,0,0,1]$
 
 Then our `one_hot_y` array is transposed per `np.T`, and our function returns the `one_hot_y`.
 
+Afterwards, the[[ loss function]] [[categorical cross entropy]] is defined. This [[loss function]] is made specifically for multi-class classification tasks where each input belongs exactly to a single class.
+
+The equation of [[categorical cross entropy]] is defined as:
+
+$CE=-\sum_{i=0}^n$
 
 ### Next Steps
 - [ ] Define Categorical Cross Entropy
