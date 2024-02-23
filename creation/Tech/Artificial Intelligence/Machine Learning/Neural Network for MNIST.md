@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-22-2024 | 9:11 PM
+Last Updated: 02-22-2024 | 9:20 PM
 ---
 Dependences are imported for the program
 
@@ -151,12 +151,27 @@ $[0,0,0,0,0,0,0,0,0,1]$
 
 Then our `one_hot_y` array is transposed per `np.T`, and our function returns the `one_hot_y`.
 
-Afterwards, the[[ loss function]] [[categorical cross entropy]] is defined. This [[loss function]] is made specifically for multi-class classification tasks where each input belongs exactly to a single class.
+Afterwards, the [[loss function]] [[categorical cross entropy]] is defined. This [[loss function]] is made specifically for multi-class classification tasks where each input belongs exactly to a single class.
 
 The equation of [[categorical cross entropy]] is defined as:
 
-$CE=-\sum_{i=0}^n$
+$CE = -\sum_{i=1}^{N}y_{i}·log(\hat{y_i})$
+
+ - $\hat{y}_i$ is the predicted probability for $ith$ class in the dataset given by the model
+- $y_i$ represents the one hot encoded vector for $ith$ class label
+- Index $i$ denotes the index of the $ith$ class of a dataset
+- $N$ denotes the total number of classes in the dataset / [[one-hot encoding]] vector.
+
+Therefore, we implement it in our code as,
+
+```
+def cat_cross_entropy()
+    CE = -np.sum(one_hot_Y * np.log(a2))
+    return CE
+```
+
+
 
 ### Next Steps
-- [ ] Define Categorical Cross Entropy
+- [x] Define Categorical Cross Entropy
 - [ ] Define Back Propagation
