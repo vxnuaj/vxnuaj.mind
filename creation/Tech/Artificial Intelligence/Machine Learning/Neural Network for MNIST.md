@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-23-2024 | 3:28 PM
+Last Updated: 02-23-2024 | 9:58 PM
 ---
 Dependences are imported for the program
 
@@ -170,12 +170,56 @@ def cat_cross_entropy()
     return CE
 ```
 
-Now, we can define our backpropagation function,
-
+We define the derivative of [[ReLU]], which for all numbers greater than 0, it's equal to 1 given that ReLU is linear when x > 0.
 
 ```
-Type/Paste Your Code
+def relu_deriv(z)
+	return (z>0).astype(int)
 ```
+
+So the derivative can be simply returned as `z>0`, with `.astype(int)` to ensure that it returns as an integer value, not a boolean value.
+
+Now, we can define our [[backpropagation]] function,
+
+```
+def back_prop(z1, a1, z2, a1, w1, w2, X, Y)
+	one_hot_Y = one_hot(Y)
+	dz2 = a2 - one_hot_Y
+	dw2 = np.dot(dz2, a1.T)
+	db2 = np.sum(dz2, axis = 1)
+	dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2)
+	dw1 = np.dot(dz1, X.T)
+	db1 = np.sum(sz1, axis = 1)
+	return dw1, db1, dw2, db2
+```
+
+Through our [[one-hot encoding]] function, we encode data labels `Y`, & it set equal to `one_hot_Y`. 
+
+The `one_hot_Y` encoded vector is used to calculate the derivative `dz2` by subtracting `a2` by the `one_hot_Y`.
+
+To break down the math,
+
+- $C_o$ is our loss function, [[categorical cross entropy]].
+- $w_2$ / `w2` is the weight which connects our hidden layer to the output layer.
+- $z_2$ / `z2` is the weighted sum from our hidden layer being fed as an input to the output layer through activation function $a_2$.
+- $\hat{y}$ is the one hot encoded vector.
+
+Given that we're implementing the [[categorical cross entropy]], the derivative of `z2`, `dz2`, can be calculated by, `a2 - one_hot_y`.
+
+$\frac{∂C_{o}}{∂z_2} = a_{2}- \hat{y}$ 
+
+> *Check out the full derivation [here](https://towardsdatascience.com/derivative-of-the-softmax-function-and-the-categorical-cross-entropy-loss-ffceefc081d1)*
+
+`dw2` is the dot product of `dz2` and `a1.T`.
+
+`dw2` is the gradient of the loss function with respect to weight `w2`.
+
+$\frac{∂C_o}{∂w_{2}}= (\frac{∂C_o}{∂a_2})(\frac{∂a_2}{∂z_2})(\frac{∂z_2}{∂w_2})$
+
+
+
+
+what derivatives, via chain rule do you need to take in to get w_2 ? 
 
 ### Next Steps
 - [x] Define Categorical Cross Entropy
