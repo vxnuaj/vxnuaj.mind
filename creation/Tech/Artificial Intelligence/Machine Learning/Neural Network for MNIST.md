@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-22-2024 | 9:20 PM
+Last Updated: 02-23-2024 | 3:28 PM
 ---
 Dependences are imported for the program
 
@@ -170,7 +170,12 @@ def cat_cross_entropy()
     return CE
 ```
 
+Now, we can define our backpropagation function,
 
+
+```
+Type/Paste Your Code
+```
 
 ### Next Steps
 - [x] Define Categorical Cross Entropy
