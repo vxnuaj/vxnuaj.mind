@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-23-2024 | 9:58 PM
+Last Updated: 02-23-2024 | 10:32 PM
 ---
 Dependences are imported for the program
 
@@ -210,17 +210,18 @@ $\frac{∂C_{o}}{∂z_2} = a_{2}- \hat{y}$
 
 > *Check out the full derivation [here](https://towardsdatascience.com/derivative-of-the-softmax-function-and-the-categorical-cross-entropy-loss-ffceefc081d1)*
 
-`dw2` is the dot product of `dz2` and `a1.T`.
+This indicates that a change to the gradient of the loss function, $C_o$, with respect to weighted sum, $z_2$, can be induced from a change in the activation output $a_2$.
 
-`dw2` is the gradient of the loss function with respect to weight `w2`.
+Then, `dw2` is the dot product of `dz2` and `a1.T`, essentially being the gradient of the loss function with respect to weight `w2`.
 
-$\frac{∂C_o}{∂w_{2}}= (\frac{∂C_o}{∂a_2})(\frac{∂a_2}{∂z_2})(\frac{∂z_2}{∂w_2})$
+$\frac{∂C_o}{∂w_{2}}= (\frac{∂a_2}{∂z_2})(\frac{∂z_2}{∂w_2})$
 
+The $\frac{∂z_2}{∂w_2}$, can simply be rewritten as the transposed $a_1$, as $a^{T}_{1}$,
 
+$\frac{∂C_o}{∂w_{2}}= (\frac{∂a_2}{∂z_2})a^{T}_1$
 
+Given that we know $\frac{∂a_2}{∂z_2}$ is equal to $a_{2}- \hat{y}$, we can rewrite our equation as,
 
-what derivatives, via chain rule do you need to take in to get w_2 ? 
+$\frac{∂C_o}{∂w_{2}}= (a_2-\hat{y})a^{T}_1$
 
-### Next Steps
-- [x] Define Categorical Cross Entropy
-- [ ] Define Back Propagation
+indicating that any change in $a_2$ will also ultimately affect the gradient of loss function $C_o$ with respect to $w_2$.
