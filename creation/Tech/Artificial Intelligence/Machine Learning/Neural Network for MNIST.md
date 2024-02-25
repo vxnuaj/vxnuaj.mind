@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-23-2024 | 10:32 PM
+Last Updated: 02-24-2024 | 9:45 PM
 ---
 Dependences are imported for the program
 
@@ -43,9 +43,9 @@ We convert our csv file into a NumPy Array and slice the NumPy array to split th
 ```
 def init_params():
     w1 = np.random.rand(32, 784) # W matrix 1 of 32 (neurons) x 784 (inputs)
-    b1 = np.zeros(784) # bias 1 of size 784 to add per 784 weighted sums.
+    b1 = np.zeros(32) # bias 1 of size 32 to add per 32 2nd layer neurons
     w2 = np.random.rand(10, 32) # W matrix 2 of 10 (neurons) x 32 (inputs)
-    b2 = np.zeroes(32) #bias 2 of size 32 to add per 32 weighted sums.
+    b2 = np.zeros(10) #bias 2 of size 10 to add per final 10 output neurons
     return w1, b2, w2, b2
 ```
 
@@ -182,14 +182,14 @@ So the derivative can be simply returned as `z>0`, with `.astype(int)` to ensure
 Now, we can define our [[backpropagation]] function,
 
 ```
-def back_prop(z1, a1, z2, a1, w1, w2, X, Y)
+def back_prop(z1, a1, z2, a2, w2, X, Y ):
 	one_hot_Y = one_hot(Y)
 	dz2 = a2 - one_hot_Y
 	dw2 = np.dot(dz2, a1.T)
-	db2 = np.sum(dz2, axis = 1)
-	dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2)
+	db2 = np.sum(dz2, axis = 1, keepdims=True)
+	dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2))
 	dw1 = np.dot(dz1, X.T)
-	db1 = np.sum(sz1, axis = 1)
+	db1 = np.sum(dz1, axis = 1, keepdims=True)
 	return dw1, db1, dw2, db2
 ```
 
@@ -203,6 +203,9 @@ To break down the math,
 - $w_2$ / `w2` is the weight which connects our hidden layer to the output layer.
 - $z_2$ / `z2` is the weighted sum from our hidden layer being fed as an input to the output layer through activation function $a_2$.
 - $\hat{y}$ is the one hot encoded vector.
+- $l$ is the $lth$ layer in range $0≤l≤2$. (If $j = l$, we are at the 1st hidden layer.)
+- $m$ is each neuron in the output layer
+- $n$ is each neuron in the input layer
 
 Given that we're implementing the [[categorical cross entropy]], the derivative of `z2`, `dz2`, can be calculated by, `a2 - one_hot_y`.
 
@@ -211,6 +214,10 @@ $\frac{∂C_{o}}{∂z_2} = a_{2}- \hat{y}$
 > *Check out the full derivation [here](https://towardsdatascience.com/derivative-of-the-softmax-function-and-the-categorical-cross-entropy-loss-ffceefc081d1)*
 
 This indicates that a change to the gradient of the loss function, $C_o$, with respect to weighted sum, $z_2$, can be induced from a change in the activation output $a_2$.
+
+Ultimately, the calculation results in `dz2` being a matrix that contains the gradient of the loss with respect to the weighted sum `dz2`, where each row represents individual training samples and each column is each individual neuron (10) in the output layer.
+
+It has a dimensionality of $(samples, 10)$.
 
 Then, `dw2` is the dot product of `dz2` and `a1.T`, essentially being the gradient of the loss function with respect to weight `w2`.
 
@@ -225,3 +232,12 @@ Given that we know $\frac{∂a_2}{∂z_2}$ is equal to $a_{2}- \hat{y}$, we can 
 $\frac{∂C_o}{∂w_{2}}= (a_2-\hat{y})a^{T}_1$
 
 indicating that any change in $a_2$ will also ultimately affect the gradient of loss function $C_o$ with respect to $w_2$.
+
+Given that `dz2` has a dimensionality of $(samples, 10)$ and the transposed `a1` has a dimensionality of $(samples, 32)$, we end up with the matrix `dw2` of a dimensionality of $(32, 10)$, where $32$ are the neurons in the hidden layer and $10$ are the neurons in the output layer. 
+
+Ultimately `dw2` / $\frac{∂C_o}{∂w_2}$ defines a matrix of the gradients of the [[loss function]] with respect to [[weights]] $w_2$ for each and every connection between each neuron $m$ and $n$
+
+The output `dw2` is then a matrix, of dimensions $(n,m)$ where $n$ is the number of neurons in the output layer and $m$ is the number of neurons in the input layer.
+
+To compute `db2`, the derivative of the loss function with respect to the bias in a neuron $n$, we can take the sum of `dz2` on the first axis. Meaning, we sum up the gradients of the loss function with respect to the [[weighted sum]] of the 10 neurons, $n$.
+

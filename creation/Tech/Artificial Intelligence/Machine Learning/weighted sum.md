@@ -1,10 +1,10 @@
 ---
 created: 2024-02-18T15:04
-Last Updated: 02-21-2024 | 9:38 PM
+Last Updated: 02-24-2024 | 8:24 PM
 ---
 Used during [[forward propagation]] to calculate the output of an individual neuron in a [[neural network]], it's the calculation of the $\sum$ of the multiplication of the [[weights]] and input with the addition of a [[bias]].
 
-$z = \sum_{i=0}^{n-1}W_i*x_{i}+ b$,
+$z = \sum_{i=1}^{N}W_i*x_{i}+ b$,
 
 where 
 - $n$ is the total number of neurons
