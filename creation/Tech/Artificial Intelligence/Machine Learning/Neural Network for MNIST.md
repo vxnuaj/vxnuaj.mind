@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-24-2024 | 9:45 PM
+Last Updated: 02-24-2024 | 10:47 PM
 ---
 Dependences are imported for the program
 
@@ -241,3 +241,16 @@ The output `dw2` is then a matrix, of dimensions $(n,m)$ where $n$ is the number
 
 To compute `db2`, the derivative of the loss function with respect to the bias in a neuron $n$, we can take the sum of `dz2` on the first axis. Meaning, we sum up the gradients of the loss function with respect to the [[weighted sum]] of the 10 neurons, $n$.
 
+Mathematically, this can be defined as,
+
+$\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})(\frac{∂z_2}{∂b_2})$
+
+Since the derivative of a variable with respect to itself is 1,
+
+$\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})1$
+
+This is summed up over all neurons $n$ in the output layer,
+
+$\frac{∂C_o}{∂b_{2}}=\sum_{i = 1}^{n}(\frac{∂C_0}{∂z_2})$
+
+The same bias is defined per layer, for each and every neuron, therefore the summation of gradient of the loss w.r.t to `z2` over every neuron, is used to calculate `db2`.
