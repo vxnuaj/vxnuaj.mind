@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-24-2024 | 10:47 PM
+Last Updated: 02-25-2024 | 5:11 PM
 ---
 Dependences are imported for the program
 
@@ -245,12 +245,30 @@ Mathematically, this can be defined as,
 
 $\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})(\frac{∂z_2}{∂b_2})$
 
+Given that the bias, $b2$ isn't part of a multiplication with the activation function, $a_2$, we don't need to take the gradient of the loss w.r.t $a_2$, we can instead directly calculate $(\frac{∂C_0}{∂z_2})$.
+
 Since the derivative of a variable with respect to itself is 1,
 
 $\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})1$
 
-This is summed up over all neurons $n$ in the output layer,
+This is summed up over all 10 neurons in the output layer,
 
-$\frac{∂C_o}{∂b_{2}}=\sum_{i = 1}^{n}(\frac{∂C_0}{∂z_2})$
+$\frac{∂C_o}{∂b_{2}}=\sum_{i = 1}^{10}(\frac{∂C_0}{∂z_2})$
 
 The same bias is defined per layer, for each and every neuron, therefore the summation of gradient of the loss w.r.t to `z2` over every neuron, is used to calculate `db2`.
+
+To calculate the gradient of the loss with respect to the weighted sum of the first layer, `dz1`, we can multiply the gradient of activation function output, ReLU(z1) / `a1`, with the dot product of `w2.T` and `dz2`.
+
+Mathematically, `dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2))` looks like this:
+
+$\frac{∂C_0}{∂z_{1}} = (\frac{∂a_1}{∂z_{1}})(\frac{∂z_2}{∂a_1})(\frac{∂C_0}{∂z_2})$.
+
+The gradient of the loss w.r.t to the weight in the hidden layer. `dw1` can be calculated by taking the dot product of `dz1` and the transposed inputs, `X.T`. Mathematically it looks like this:
+
+$\frac{∂C_o}{∂w_{1}}= (\frac{∂C_0}{∂a_1})(\frac{∂a_1}{∂z_1})(\frac{∂z_1}{∂w_1})$
+
+Now `db1`, similar to `db2` can be calculated as the sum of `dz1`,
+
+$\frac{∂C_o}{∂b_1}=\sum_{i=1}^{32}\frac{∂C_o}{∂z_1}$
+
+over a total of $32$ neurons in the hidden layer.
