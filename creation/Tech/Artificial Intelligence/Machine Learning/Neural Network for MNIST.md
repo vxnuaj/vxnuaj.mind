@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-25-2024 | 5:11 PM
+Last Updated: 02-26-2024 | 6:18 PM
 ---
 Dependences are imported for the program
 
@@ -245,7 +245,7 @@ Mathematically, this can be defined as,
 
 $\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})(\frac{∂z_2}{∂b_2})$
 
-Given that the bias, $b2$ isn't part of a multiplication with the activation function, $a_2$, we don't need to take the gradient of the loss w.r.t $a_2$, we can instead directly calculate $(\frac{∂C_0}{∂z_2})$.
+Given that the bias, `b2` isn't part of a multiplication with the activation function, $a_2$, we don't need to take the gradient of the loss w.r.t `a2`, we can instead directly calculate $(\frac{∂C_0}{∂z_2})$.
 
 Since the derivative of a variable with respect to itself is 1,
 

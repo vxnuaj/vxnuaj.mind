@@ -1,5 +1,5 @@
 ---
-Last Updated: 02-21-2024 | 9:24 PM
+Last Updated: 02-26-2024 | 6:24 PM
 ---
 Gradient descent is an [[optimization algorithm]] used iteratively to find the minimum of a function by moving in the negative direction of the gradient of a function.
 
@@ -17,7 +17,7 @@ Say we have a dummy [[loss function]]: $y = x^2$, parameter: $x_0 = 4$, and a le
 
 2. Perform an iteration of gradient descent.
 
-	$x_{1}=x_{0}-α·\frac{dy}{dx}$
+	$x_{1}=x_{0}-α·\frac{dy}{dx}$ 
 	$x_{1}=4-.05·8$
 	$x_{1}=4-.4$
 	$x_{1}=3.6$
