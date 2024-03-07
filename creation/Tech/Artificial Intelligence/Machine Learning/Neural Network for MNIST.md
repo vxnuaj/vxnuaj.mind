@@ -1,57 +1,122 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 02-26-2024 | 6:18 PM
+Last Updated: 03-07-2024 | 1:36 PM
 ---
-Dependences are imported for the program
+We import the dependencies for our program
 
 ```
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
+import pickle
 ```
 
 NumPy is for data manipulation & linear algebra.
-Pandas is for reading the Dataset.
-PyPlot is for visualization of the dataset
+Pandas is for reading the dataset from CSV format.
+Pickle will allow us to save the parameters of our trained model as a byte stream.
+
+First things first, we define the functions that will allow us to save our model once it's trained and load our trained model for usage.
 
 ```
-train_data = pd.read_csv("MNIST CSV archive/mnist_train.csv")
+def save_model(w1, b1, w2, b2, filename):
+	with open(filename, 'wb') as f:
+		pickle.dump((w1, b1, w2, b2), f)
 
-print(train_data.head) ## Optional if in Jupyter Notebook.
+def load_model(filename):
+	with open(filename, 'rb') as f:
+		return pickle.load(f)
 ```
 
-Given that the MNIST dataset is within our directory in csv format, we use the `pd.read_csv` function to access data from the csv file and upload it as a pandas DataFrame.
+The `save_model` function will take in the parameters of our neural network `w1, b1, w2, b2` and the `filename` we wish to assign to the file `pickle.dump` will create (which will be defined as `.pkl` later). With the `open()` function, we open a defined file in the mode `wb`, which indicates `w`riting to the file in `b`inary, to variable `f`.
 
-This is assigned to `train_data`, & to confirm that it worked, we can print the first few rows of the dataset using the `.head` function.
+Then we use `pickle.dump()` to write our parameters, `w1, b1, w2, b2` to our opened file, to save it for future use.
+
+The `load_model` function does a similar job, but instead of saving the model parameters, it loads our parameters into our program, by reading the sequence of bytes (`rb` mode) from the file, onto variable `f`. `pickle.load()` is then used to get the parameters from the file to load onto our program
+
+Given that the MNIST dataset within our directory in csv format, we use the `pd.read_csv`function to access data from the csv file and upload it as a pandas DataFrame.
+
+```
+train_data = pd.read_csv("../MNIST CSV archive/mnist_train.csv")
+train_data.head(5) ## Optional if in Jupyter Notebook.
+```
+
+This is assigned to `train_data`, & to confirm that it worked, you can print the first 5 rows of the dataset using the `pd.head(5)` function if you're in a Jupyter notebook
 
 You should get something similar, if not the same, to this
 
 ![[MNISTReadCSVResults.png]]
 
+Each row represents each digit in the dataset while each column corresponds to each pixel value for the corresponding digit / row.
+
+Now that we've verified that our dataset is loaded into our program, we can safely begin pre-processing our dataset to prepare it for our model.
 
 ```
 train_data = np.array(train_data)
-Y_train = train_data[:,0] #Getting our training labels
-X_train = train_data[:,1:] #Getting our training data
+m, n = train_data.shape
+np.random.shuffle(train_data)
 ```
 
-We convert our csv file into a NumPy Array and slice the NumPy array to split the training labels and training features.
+We turn our DataFrame into a NumPy array which will allow us to perform mathematical operations on our dataset.
 
-`Y_train` are the labels of our training data.
-`X_train` is the actual training data.
+The rows of our NumPy array, `train_data`, is assigned to variable `m` and the columns are assigned to variable `n`. 
+
+The rows or `m` is equal to the total number of samples (digits) in our dataset
+The columns or `n` is equal to the total number of pixel values in our dataset.
+
+`m` will allow us to 
+- Average the gradient of the loss with respect to our weights and biases over all samples, `m` which will allow for our model to learn as it's fed more digits.
+- Compute the average loss using [[categorical cross entropy]] per samples `m`.
+
+`n` will allow us to
+- Split our training data and our labels from our NumPy array.
+
+Finally, we use `np.random.shuffle()` to randomize the order of our training data to prevent overfitting when we begin to train our model.
+
+To further pre-process our data,
+
+```
+train_data = train_data[0:m].T
+Y_train = train_data[0]
+X_train = train_data[1:n]
+X_train = X_train / 255
+```
+
+we take our `train_data` and transpose it over all samples `m`.
+
+Our labels, now located in the first row of our dataset (given that we transposed `train_data`), denoted by index `0`, will be extracted accessed by indexing `train_data` and row `[0]`. We assign the labels to `Y_train`.
+
+The pixel values of each individual digit in the dataset will be accessed by indexing `train_data` from row `1` to `n` samples. We assign the training data to `X_train`. 
+
+Afterward, we normalize our datapoints to between the range 0-1 by diving `X_train` by `255`. This will allow for our model to more effectively compute a prediction by applying its parameters through a [[weighted sum]] & [[activation function]] and then learn faster through [[backpropagation]] and [[gradient descent]]. 
+
+Now, we can begin to define our initial functions that make up our model.
 
 ```
 def init_params():
-    w1 = np.random.rand(32, 784) # W matrix 1 of 32 (neurons) x 784 (inputs)
-    b1 = np.zeros(32) # bias 1 of size 32 to add per 32 2nd layer neurons
-    w2 = np.random.rand(10, 32) # W matrix 2 of 10 (neurons) x 32 (inputs)
-    b2 = np.zeros(10) #bias 2 of size 10 to add per final 10 output neurons
-    return w1, b2, w2, b2
+	w1 = np.random.rand(32, 784) - .5
+	b1 = np.zeros((32,1)) -.5
+	w2 = np.random.rand(10, 32) - .5
+	b2 = np.zeros((10,1)) - .5
+	return w1, b1, w2, b2
 ```
+
+Our network will consist of three layers.
+
+- The Input Layer will take in 784 datapoints, representing a pixel value from each 28 by 28 image of a handwritten MNIST digit
+- The 1 Hidden Layer will take in the fed-forward 784 datapoints into it
+- Output Layer
+
+
+
+We will initialize our weights matrix by creating a random array of floats with dimensions `32, 784`. The `32` rows are the number of output neurons and the `784` columns are the number of input values into our first hidden layer.
+
+
+---
+
+
 
 The initial parameters, [[weights]] and [[bias]], for our function alongside the number of neurons are defined.
 
-Our network will have an input layer of `784` Neurons, as each image within the MNIST dataset consists of `784` pixels.
+Our network will have an input layer of `784` Neurons, as each image within the MNIST dataset consists of `784` pixels, in a 28 by 28 pixel grid.
 
 ![[MNIST Sample.png| Images just like these]]
 
