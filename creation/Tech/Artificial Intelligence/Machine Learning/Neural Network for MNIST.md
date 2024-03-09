@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-07-2024 | 2:12 PM
+Last Updated: 03-09-2024 | 11:16 AM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -9,6 +9,8 @@ MNIST training set consists of handwritten digits with a dimensionality of 28 by
 This is what a set of handwritten MNIST digits look like:
 
 ![[Screenshot 2024-03-07 at 2.09.02 PM.png|300]]
+
+Our dataset holds a total of 60,000 digits for training our model and 10,000 digits for testing our model.
 
 Our network will be able to identify the numerical value of each handwritten digit.
 
@@ -106,18 +108,53 @@ The pixel values of each individual digit in the dataset will be accessed by ind
 
 Afterward, we normalize our datapoints to between the range 0-1 by diving `X_train` by `255`. This will allow for our model to more effectively compute a prediction by applying its parameters through a [[weighted sum]] & [[activation function]] and then learn faster through [[backpropagation]] and [[gradient descent]]. 
 
+If in a Jupyter notebook, you can check the total size of our labels, `Y_train`, by running,
+
+```
+Y_train.size
+```
+
+You should get `60000` as the output, representing the total number of labels that correspond to our `60000` digit samples. 
+
+You can also run,
+
+```
+X_train.shape
+```
+
+to get the shape of our training data. You should get `784, 60000` as the output, 784 being the number of pixel values per each 28 by 28 digit in the `60000` total digit samples
+
 Now, we can begin to define our initial functions that make up our model.
 
 ```
 def init_params():
 	w1 = np.random.rand(32, 784) - .5
-	b1 = np.zeros((32,1)) -.5
+	b1 = np.zeros((32,1)) - .5
 	w2 = np.random.rand(10, 32) - .5
 	b2 = np.zeros((10,1)) - .5
 	return w1, b1, w2, b2
 ```
 
-We will initialize our weights matrix by creating a random array of floats with dimensions `32, 784`. The `32` rows are the number of output neurons and the `784` columns are the number of input pixel values into our first hidden layer.
+We will initialize our first weights matrix, `w1` by creating a random array of floats with a dimension of `32, 784`. The `32` rows represent the number of output neurons in our first hidden layer and the `784` columns are the number of input pixel values into our first hidden layer.
+
+Our first [[bias]] matrix, `b1` will be initialized using `np.zeros`, creating a matrix of 0s, with a dimensionality of `32` rows and `1` column. The `32` represents each input neuron in our first hidden layer. We only use 1 column as we only need `32` bias parameters for each neuron, nothing more.
+
+Our second [[weights]] matrix `w2` will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
+
+The second [[bias]] matrix, `b2` will be another array of `np.zeros`, with a dimensionality of `10` rows and `1` column. `10` being the total number of bias values we only. `1` column as we only need a total of `10` bias values.
+
+
+Then, the activation functions we'll be using, [[ReLU]] and [[SoftMax]], will be initialized.
+
+```
+def relu(z): #ReLU
+	return np.maximum(z,0) # np.maximum(z,0) is ReLU
+
+def softmax(z): #Softmax
+	A = np.exp(z)/ sum(np.exp(z))
+	return A
+```
+
 
 
 ---
