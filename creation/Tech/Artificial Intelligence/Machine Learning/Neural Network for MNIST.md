@@ -1,7 +1,25 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-07-2024 | 1:36 PM
+Last Updated: 03-07-2024 | 2:12 PM
 ---
+We will be building a neural network to classify digits from the MNIST dataset.
+
+MNIST training set consists of handwritten digits with a dimensionality of 28 by 28  pixels, amounting to a total of 784 pixel values. Each numerical pixel value ranges from 0 to 255, with 0 representing black and 255 representing white.
+
+This is what a set of handwritten MNIST digits look like:
+
+![[Screenshot 2024-03-07 at 2.09.02 PM.png|300]]
+
+Our network will be able to identify the numerical value of each handwritten digit.
+
+It will consist of three layers.
+
+The **Input Layer** will take in `784` datapoints, representing a pixel value from each 28 by 28 image of a handwritten MNIST digit
+
+The **Hidden Layer** will take in the fed-forward `784` datapoints into it's `32` neurons and output `32` values.
+
+The **Output Layer** will take in the `32` output values from the hidden layer into it's `10` neurons and output `10` activation values, of which the neuron with the highest activation value will correspond to the networks final digit prediction
+
 We import the dependencies for our program
 
 ```
@@ -99,15 +117,7 @@ def init_params():
 	return w1, b1, w2, b2
 ```
 
-Our network will consist of three layers.
-
-- The Input Layer will take in 784 datapoints, representing a pixel value from each 28 by 28 image of a handwritten MNIST digit
-- The 1 Hidden Layer will take in the fed-forward 784 datapoints into it
-- Output Layer
-
-
-
-We will initialize our weights matrix by creating a random array of floats with dimensions `32, 784`. The `32` rows are the number of output neurons and the `784` columns are the number of input values into our first hidden layer.
+We will initialize our weights matrix by creating a random array of floats with dimensions `32, 784`. The `32` rows are the number of output neurons and the `784` columns are the number of input pixel values into our first hidden layer.
 
 
 ---
