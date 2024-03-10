@@ -1,8 +1,8 @@
 ---
 created: 2024-02-18T14:50
-Last Updated: 02-26-2024 | 6:17 PM
+Last Updated: 03-09-2024 | 5:54 PM
 ---
-The weighted matrix of a neuron, through it's individual [[weights]], $W_i$, allows for the calculation of the [[weighted sum]] through multiplying $W_i$ with the respective input value
+The weighted matrix of a neuron, through it's individual [[weight]], $W_i$, allows for the calculation of the [[weighted sum]] through multiplying $W_i$ with the respective input value
 
 In the matrix, the number of rows represents the number of neurons at the current layer, the [[hidden size]], and the columns represents the size of input neurons / data points.
 

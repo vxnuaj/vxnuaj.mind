@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-09-2024 | 11:16 AM
+Last Updated: 03-09-2024 | 6:07 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -139,29 +139,61 @@ We will initialize our first weights matrix, `w1` by creating a random array of 
 
 Our first [[bias]] matrix, `b1` will be initialized using `np.zeros`, creating a matrix of 0s, with a dimensionality of `32` rows and `1` column. The `32` represents each input neuron in our first hidden layer. We only use 1 column as we only need `32` bias parameters for each neuron, nothing more.
 
-Our second [[weights]] matrix `w2` will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
+Our second [[weight]] matrix `w2` will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
 
 The second [[bias]] matrix, `b2` will be another array of `np.zeros`, with a dimensionality of `10` rows and `1` column. `10` being the total number of bias values we only. `1` column as we only need a total of `10` bias values.
 
-
-Then, the activation functions we'll be using, [[ReLU]] and [[SoftMax]], will be initialized.
+Now, the activation functions we'll be using, [[ReLU]] and [[SoftMax]], will be initialized.
 
 ```
 def relu(z): #ReLU
 	return np.maximum(z,0) # np.maximum(z,0) is ReLU
 
 def softmax(z): #Softmax
-	A = np.exp(z)/ sum(np.exp(z))
+	A = np.exp(z)/ np.sum(np.exp(z))
 	return A
+```
+
+Mathematically, [[ReLU]] is simply defined as $f(z) = max(0,z)$, where $z$ is the input weighted sum for a given neuron. In NumPy, this can simply be expressed as `np.maximum(z,0)`
+
+Now [[SoftMax]], which will be used for our output layer to compute probabilities per output neuron, is a little more mathematically complex. 
+
+[[SoftMax]] can be defined as $\hat y_{i}=\frac{e^{z_i}}{\sum_{j=1}^{K}e^{z_j}}$, where 
+- $i$ is the $ith$ output of the final layer, dependent on the number of neurons in the final layer. 
+- $j$ is the index for the total number of classes, $K$, in a dataset. 
+  In our case, $K$ is $10$, as our model has $10$ classes ranging from 0-9
+
+In NumPy, this function can be expressed as `np.exp(z)/np.sum(np.exp(z))`.
+
+Now, we can begin to define our forward function, which will allow us to feed our data through our network, applying the initialized [[weight]] and [[bias]]es, to calculate the [[weighted sum]]s and the activation outputs.
+
+Let's talk about the weighted sum.
+
+The [[weighted sum]] is essentially the sum of the multiplication of each [[weight]] and input at a given neuron. Once this sum is calculated, a bias parameter is then added for a final value.
+
+The equation is defined as, $z = \sum_{i=1}^{N}w_{ij}·x_{ij}+ b_i$, where,
+
+- $N$ is the total number of neurons in a current layer
+- $i$ is the index of $ith$ neuron in the current layer
+- $j$ is the index of $jth$ neuron from a previous layer connected to $ith$ neuron
+- $w_{ij}$ is a weight at the connection between $jth$ and $ith$ neuron
+- $x_{ij}$ is a given input at $ith$ neuron from $jth$ neuron at the previous layer
+- $b_i$ is the bias for $ith$ neuron
+
+```
+def forward(w1, b1, w2, b2, X)
+	z1 = w1.dot(X) + b1
+	a1 = relu(z1)
+	z2 = w2.dot(a1) + b2
+	a2 = softmax(z2)
+	return z1, a1, z2, a2
 ```
 
 
 
 ---
 
-
-
-The initial parameters, [[weights]] and [[bias]], for our function alongside the number of neurons are defined.
+The initial parameters, [[weight]] and [[bias]], for our function alongside the number of neurons are defined.
 
 Our network will have an input layer of `784` Neurons, as each image within the MNIST dataset consists of `784` pixels, in a 28 by 28 pixel grid.
 
@@ -347,7 +379,7 @@ indicating that any change in $a_2$ will also ultimately affect the gradient of 
 
 Given that `dz2` has a dimensionality of $(samples, 10)$ and the transposed `a1` has a dimensionality of $(samples, 32)$, we end up with the matrix `dw2` of a dimensionality of $(32, 10)$, where $32$ are the neurons in the hidden layer and $10$ are the neurons in the output layer. 
 
-Ultimately `dw2` / $\frac{∂C_o}{∂w_2}$ defines a matrix of the gradients of the [[loss function]] with respect to [[weights]] $w_2$ for each and every connection between each neuron $m$ and $n$
+Ultimately `dw2` / $\frac{∂C_o}{∂w_2}$ defines a matrix of the gradients of the [[loss function]] with respect to [[weight]] $w_2$ for each and every connection between each neuron $m$ and $n$
 
 The output `dw2` is then a matrix, of dimensions $(n,m)$ where $n$ is the number of neurons in the output layer and $m$ is the number of neurons in the input layer.
 
