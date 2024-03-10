@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-09-2024 | 6:07 PM
+Last Updated: 03-09-2024 | 10:17 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -141,7 +141,7 @@ Our first [[bias]] matrix, `b1` will be initialized using `np.zeros`, creating a
 
 Our second [[weight]] matrix `w2` will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
 
-The second [[bias]] matrix, `b2` will be another array of `np.zeros`, with a dimensionality of `10` rows and `1` column. `10` being the total number of bias values we only. `1` column as we only need a total of `10` bias values.
+The second [[bias]] matrix, `b2` will be another matrix of `np.zeros`, with a dimensionality of `10` rows and `1` column. `10` being the total number of bias values we only. `1` column as we only need a total of `10` bias values.
 
 Now, the activation functions we'll be using, [[ReLU]] and [[SoftMax]], will be initialized.
 
@@ -167,7 +167,18 @@ In NumPy, this function can be expressed as `np.exp(z)/np.sum(np.exp(z))`.
 
 Now, we can begin to define our forward function, which will allow us to feed our data through our network, applying the initialized [[weight]] and [[bias]]es, to calculate the [[weighted sum]]s and the activation outputs.
 
-Let's talk about the weighted sum.
+```
+def forward(w1, b1, w2, b2, X)
+	z1 = w1.dot(X) + b1
+	a1 = relu(z1)
+	z2 = w2.dot(a1) + b2
+	a2 = softmax(z2)
+	return z1, a1, z2, a2
+```
+
+The first calculation within this function computes the [[weighted sum]] of the hidden layer in our network. 
+
+Before we go further, lets talk about the [[weighted sum]].
 
 The [[weighted sum]] is essentially the sum of the multiplication of each [[weight]] and input at a given neuron. Once this sum is calculated, a bias parameter is then added for a final value.
 
@@ -180,17 +191,93 @@ The equation is defined as, $z = \sum_{i=1}^{N}w_{ij}·x_{ij}+ b_i$, where,
 - $x_{ij}$ is a given input at $ith$ neuron from $jth$ neuron at the previous layer
 - $b_i$ is the bias for $ith$ neuron
 
+In our code, `w1` represents the initialized matrix of weights with a dimensionality of `32, 784`. Rather than calculating the sum of each individual weight $w_{ij}$ multiplied by an input, $x_{ij}$, through `np.sum` we can take the dot product of the matrices `w1` and `X`, which already then calculates a summation of the multiplication.
+
+The product of this operation will result in a final matrix, `z1` which contains the weighted sums of the hidden layer at each of the 32 neurons.
+
+Now, we apply the [[ReLU]] activation function, $f(z) = max(0,z)$, through our defined function `relu(z)`, by taking in `z1` as its input. The resulting output is the activation matrix which holds an activation value each of the `32` neurons.
+
+To calculate `z2`, the [[logits]] / [[weighted sum]] of the output layer, we do the same [[weighted sum]] calculation where we multiply by the input, this time `a1` representing the output of the hidden layer, by the weighted matrix `w2`. 
+
+Our output, matrix `z2` holds the weighted sums of each of the `10` neurons at the output layer. We apply `z2` to our defined [[SoftMax]] activation function, $\hat y_{i}=\frac{e^{z_i}}{\sum_{j=1}^{K}e^{z_j}}$, to calculate the final probabilities for each of our 10 classes in our dataset (digits 0 to 9).
+
+Up to here, we've fully defined the feed forward mechanism of our neural network. Now, we can begin to initialize some of the functions that will begin to make up the backpropagation for training our network.
+
+First, we begin to define the function that takes the derivative of the [[ReLU]] activation function. This will help us calculate the gradients (aka derivatives) of our loss function (which will be [[categorical cross entropy]]), with respect to a given parameter.
+
 ```
-def forward(w1, b1, w2, b2, X)
-	z1 = w1.dot(X) + b1
-	a1 = relu(z1)
-	z2 = w2.dot(a1) + b2
-	a2 = softmax(z2)
-	return z1, a1, z2, a2
+def relu_deriv(z):
+	return z > 0
 ```
 
+Given that [[ReLU]], when the input is greater than 0, is a linear function with a slope of 1, the derivative of [[ReLU]] when the value is greater than 0 will always return 1.
 
+When ReLU is ≤ 0, it always returns 0 hence the derivative will always be 0.
 
+Therefore, we can simply return `z > 0` as this gives us a boolean matrix that assesses whether or not `z` is greater than 0. If `z` is greater than 0, it will return True, representing 1, and if not, it will return False, representing 0. 
+
+Now the function defining the [[one-hot encoding]] vector of a corresponding label for an input digit will be initialized.
+
+A [[one-hot encoding]] is a way of expressing the labels for a dataset in a binary format.
+
+It transforms the labels of a dataset into vectors of binary 1s and 0s to allow for a model to more easily interpret & then classify pieces of data.
+
+These vectors have an equal length to the number of classes in a dataset.
+
+For each one-hot encoded vector, each binary element will be a 0 except for the element that identifies a specific class, which will be set to 1.
+
+For example, if I had a dataset of 3 classes ranging from digits 0 to 2, the one hot encoded vector for each would be:
+
+- 0 | $[1, 0, 0]$
+- 1 | $[0,1,0]$
+- 2 | $[0,0,1]$
+
+```
+def one_hot(Y):
+	one_hot_Y = np.zeros((Y.size, Y.max() + 1))
+	one_hot_Y[np.arange(Y.size), Y] = 1
+	one_hot_Y = one_hot_Y.T
+	return one_hot_Y
+```
+
+To initialize our matrix for our [[one-hot encoding]], we create a new matrix of 0s through `np.zeros`, of a dimensionality of `Y.size, Y.max() + 1`.
+
+> *Remember, Y represents the total labels of our dataset, 1 label per digit sample.*
+
+Essentially, we initialize a matrix with each row representing each digit in our dataset (per `Y.size`) while the columns represent the total classes of our dataset which amounts to 10.
+
+> *`Y.max()` calculates the maximum value in our labels which is 9 so we `+ 1` to get a total of 10 for the length of each row*
+
+The dimensionality for our [[one-hot encoding]] matrix should end up as `60000, 10`.
+
+Now, we can index our matrix to assign a value 0 to 1, which will indicate a corresponding label from our dataset.
+
+Using `np.arange` we create an matrix of length `Y.size`, which in our case, will be `60000`, as our training set holds `60000` digits. This matrix holds values ranging from 0 to `60000`, with a step size of 1
+
+Like this: $[0,1, ... 59999, 60000]$
+
+So we index our `one_hot_y` matrix at `np.arange(Y.size), Y`. 
+
+Essentially, given that the matrix defined by `np.arange(Y.size)` has `60000` rows, for each `60000` rows, we index a 0 at value `Y` and then set it equal to 1.
+
+As an example, If the first row in `one_hot_Y` was indexed by a `Y` value of 3 and the second row was indexed by a value of 6, the first two rows of `one_hot_Y` would look like:
+
+$[0,0,0,1,0,0,0,0,0,0]$
+$[0,0,0,0,0,0,1,0,0,0]$
+
+Then, we transpose the `one_hot_Y` matrix. This will allow us to match the dimensionality of this matrix with `a2`. Later on, during [[backpropagation]], this will allow us to calculate the derivative of the loss function with the weighted sum `z2` (you'll see later!).
+
+Now, we can define our [[loss function]]. 
+
+We will be using [[categorical cross entropy]], a loss function designed for multiclass classification problems just like the one we're dealing with right now with the MNIST dataset!
+
+It calculates the loss between the predicted probability and a true value by taking the logarithm of the predicted probability and multiplying it by a true value. 
+
+It's calculated by $y_i·log(\hat{y_i})$, where $y_i$ is the true value and $\hat{y}_i$ is the predicted probability for $ith$ class of a dataset.
+
+In our network, we'll want to calculate the total loss of our network over all neurons / classes. So what we do is apply
+
+cool ;)
 ---
 
 The initial parameters, [[weight]] and [[bias]], for our function alongside the number of neurons are defined.
