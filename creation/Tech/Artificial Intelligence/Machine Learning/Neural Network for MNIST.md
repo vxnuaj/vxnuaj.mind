@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-10-2024 | 12:36 noon
+Last Updated: 03-10-2024 | 2:35 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -350,16 +350,110 @@ Note, we don't explicitly calculate $\frac{∂C}{∂a_2}$ as it's already done i
 
 This effectively outputs the [[loss]] for each weight at the output layer which will be extremely useful for the [[gradient descent]].
 
-We can defined this as `dz2.dot(a1.T)`where,
+We can define this as `dz2.dot(a1.T)`where,
+
 - `dz1` is $\frac{∂C}{∂z_2}$
 - `a1.T` is $\frac{∂z_2}{∂w_2}$
 
-$\frac{∂z_2}{∂w_2}$ is equivalent to the transposition of `a1`
+Here's why $\frac{∂z_2}{∂w_2}$ is equivalent to the transposition of `a1`.
+
+We calculate $z_2$ through $w_{2}·a_{1}+b_1$
+
+To find the $\frac{∂z_2}{∂w_2}$, we're essentially taking the derivative of the matrix multiplication of $w_2$ and $a_1$. Whenever we take the derivative of a matrix multiplication with respect to one of the operands, we get transposition of the other operand which in this case is $a_1$.
+
+Why the transposition?
+
+In the original matrix multiplication, $z_{2}=w_{2}·a_1$, we're essentially multiplying the rows of $w_2$ by the columns of $a_1$. 
+
+To keep the calculation of the derivative uniform and consistent with the original matrix multiplication, when we take the derivative of a matrix multiplication w.r.t an operand, we must transpose the remaining operand, which in this case is $a_1$
+
+Now, we average the result from `dz2.dot(a1.T)` over the total `60000` samples by dividing over `m`. This is done in order to get the average loss over all samples.
+
+Now, to calculate `db2`, we take a summation of `dz2`.
+
+`db2 = np.sum(dz2) * 1/m`
+
+We want to do so as we'll be using the total gradients of the loss w.r.t `dz2` for all 10 output neurons as our medium for error correcting `b2`.
+
+Mathematically, this is defined as $\frac{∂C}{∂b_{2}}=(\frac{∂C}{∂z_2})(\frac{∂z_2}{∂b_2})$, but can be simplified to 
+
+$\frac{∂C}{∂b_{2}}=(\frac{∂C}{∂z_2})1=(\frac{∂C}{∂z_2})$.
+
+But we want to take the sum of `dz2` over all 10 output neurons so we can define this as,
+
+$\frac{∂C_o}{∂b_{2}}=\sum_{i = 1}^{10}(\frac{∂C}{∂z_{2i}})$
+
+where $i$ is the $ith$ neuron.
+
+Again, this is averaged over all `60000` samples `m`.
+
+Now, to calculate `dz1`, the gradient of the loss w.r.t to the weighted sum of the hidden layer, we take the derivative of [[ReLU]] and multiply it by the dot product of `w2.T` and `dz2`.
+
+`dz1 = relu_deriv(z) * w2.T.dot(dz2)`
+
+Mathematically, this looks like $\frac{∂C}{∂z_{1}}= (\frac{∂C}{∂z_2})(\frac{∂z_2}{∂a_1})(\frac{∂a_1}{∂z_1})$ where, 
+
+- $(\frac{∂a_1}{∂z_1})$ is `relu_deriv(z)`
+- $(\frac{∂z_2}{∂a_1})$ is `w2.T`
+- $(\frac{∂C}{∂z_2})$ is `dz2`
+
+We can now use our definition of `dz1` to calculate `dw1`, the gradient of the loss with respect to the weights in the hidden layer.
+
+`dw1 = np.dot(dz1, X.T)` can be expressed as,
+
+$\frac{∂C}{∂w_{1}} = ({\frac{∂C}{∂z_1}})(\frac{∂z_1}{∂w_1})$.
+
+Here, the transposition of `X`, `X.T` is essentially $\frac{∂z_1}{∂w_1}$. 
+
+Since we must compute the matrix multiplication of $w_1$ and the input matrix $X$ to get the weighted sum $z_1$, taking the derivative of $z_1$ w.r.t to one of the operands, in this case $w_1$, will result in the transposition of the remaining operand, $X$, ultimately yielding `X.T`.
+
+Once again, we average this by dividing over our 60000 samples, `m`
+
+Finally, to calculate the gradient of the loss w.r.t to our final parameter `b1`, we can take the sum of `dz1`.
+
+`db1 = np.sum(dz1)`
+
+Just as earlier, we want to take the sum of the weighted outputs in our hidden layer as we'll be using this metric for error correcting `b1`.
+
+We divide this over our 60000 samples, `m` to get the average gradient over all samples.
+
+Once defining the function for [[backpropagation]], now we can define the function which represents our update rule. 
+
+It will directly update our parameters based on the prior calculations of the gradient.
+
+```
+def update_params(w1, b1, w2, b2, alpha)
+	w1 = w1 - alpha * dw1
+	b1 = b1 - alpha * db1
+	w2 = w2 - alpha * dw2
+	b2 = b2 - alpha * db2
+	return w1, b1, w2, b2
+```
+
+This process defines the structure of the [[gradient descent]] algorithm, through the update rule of, $\uptheta = \uptheta - \upalpha*\frac{∂C}{∂\uptheta}$.
+
+For each parameter, `w1`, `b1`, `w2`, `b2`, we apply this update rule to ultimately update our parameters towards an optimal value through [[gradient descent]]
+
+Now, we can define the function which will get the final prediction of our model from the estimated probabilities.
+
+```
+def get_pred(a2)
+	pred = np.argmax(a2, axis = 0)
+	return pred
+```
+
+Through the function, `np.argmax()`, we get the maximum value of vector `a2`, to get the highest probability predicted over all classes in our dataset.
+
+Now we define the function which will dynamically compute the accuracy of our model and print 
+
+```
+def accuracy()
+```
+
 
 
 
 (find me)
-
 
 ---
 

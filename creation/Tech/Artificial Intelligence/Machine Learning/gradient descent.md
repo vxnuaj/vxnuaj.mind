@@ -1,12 +1,14 @@
 ---
-Last Updated: 03-10-2024 | 10:08 AM
+Last Updated: 03-10-2024 | 2:18 PM
 ---
 Gradient descent is an [[optimization algorithm]] used iteratively to find the minimum of a function by moving in the negative direction of the gradient of a function.
 
 In the context of [[deep learning]], the function being minimized is the [[loss function]].
 This allows for a model to update its weights and biases in the direction what yields a minimal value for a [[loss function]], ultimately minimizing inaccuracy in a [[neural network]].
 
-It does so through calculating $\frac{d(loss)}{d(param)}$, to figure out where to optimize towards.
+It does so through calculating $\frac{∂(loss)}{∂(param)}$, to figure out where to optimize towards.
+
+The equation is defined as $param = param - \upalpha*\frac{∂(loss)}{∂(param)}$
 
 Say we have a dummy [[loss function]]: $y = x^2$, parameter: $x_0 = 4$, and a learning rate: $α =.05$
 
@@ -17,7 +19,7 @@ Say we have a dummy [[loss function]]: $y = x^2$, parameter: $x_0 = 4$, and a le
 
 2. Perform an iteration of gradient descent.
 
-	$x_{1}=x_{0}-α·\frac{dy}{dx}$ 
+	$x_{1}=x_{0}-α·\frac{∂y}{∂x}$ 
 	$x_{1}=4-.05·8$
 	$x_{1}=4-.4$
 	$x_{1}=3.6$
