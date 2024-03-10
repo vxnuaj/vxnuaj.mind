@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-10-2024 | 2:35 PM
+Last Updated: 03-10-2024 | 2:40 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -150,6 +150,7 @@ def relu(z): #ReLU
 	return np.maximum(z,0) # np.maximum(z,0) is ReLU
 
 def softmax(z): #Softmax
+	z -= np.max(z)
 	A = np.exp(z)/ np.sum(np.exp(z))
 	return A
 ```
@@ -164,6 +165,8 @@ Now [[SoftMax]], which will be used for our output layer to compute probabilitie
   In our case, $K$ is $10$, as our model has $10$ classes ranging from 0-9
 
 In NumPy, this function can be expressed as `np.exp(z)/np.sum(np.exp(z))`.
+
+ `z -= np.max(z)` subtracts the maximum value in matrix `z`. This prevents numerical overflow and will mitigate any possible nan values we might get in our loss function.
 
 Now, we can begin to define our forward function, which will allow us to feed our data through our network, applying the initialized [[weight]] and [[bias]]es, to calculate the [[weighted sum]]s and the activation outputs.
 
@@ -482,7 +485,8 @@ We'll be using [[ReLU]] and [[SoftMax]].
 def relu(z):
     return np.maximum(z,0)
 
-def softmax(z):
+def softmax(z
+	z -= np.max(z)
     return (np.exp(x)/np.exp(x).sum())
 ```
 
