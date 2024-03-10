@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-09-2024 | 10:17 PM
+Last Updated: 03-09-2024 | 10:27 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -271,11 +271,23 @@ Now, we can define our [[loss function]].
 
 We will be using [[categorical cross entropy]], a loss function designed for multiclass classification problems just like the one we're dealing with right now with the MNIST dataset!
 
-It calculates the loss between the predicted probability and a true value by taking the logarithm of the predicted probability and multiplying it by a true value. 
+```
+def cat_cross_entropy(one_hot_Y, a2 ):
+	CCE = -np.sum(one_hot_Y * np.log(a2)) * 1/m
+	return CCE
+```
+
+It calculates the [[loss]] between the predicted probability and a true value by taking the logarithm of the predicted probability and multiplying it by a true value. 
 
 It's calculated by $y_i·log(\hat{y_i})$, where $y_i$ is the true value and $\hat{y}_i$ is the predicted probability for $ith$ class of a dataset.
 
-In our network, we'll want to calculate the total loss of our network over all neurons / classes. So what we do is apply
+In our network, we'll want to calculate the total loss of our network over all neurons / classes. So what we do is apply a summation over all $i$ classes in our dataset.
+
+The final equation will be $CCE = -\sum_{i=1}^{N}y_i·log(\hat{y}_i)$, where $N$ is the total classes in our dataset.
+
+This is represented by `-np.sum(one_hot_Y * np.log(a2))` in NumPy.
+
+We divide this over `m` in order to get the average loss over the total samples in our dataset.
 
 cool ;)
 ---
