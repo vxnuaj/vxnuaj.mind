@@ -1,5 +1,5 @@
 ---
-Last Updated: 02-26-2024 | 6:24 PM
+Last Updated: 03-10-2024 | 10:08 AM
 ---
 Gradient descent is an [[optimization algorithm]] used iteratively to find the minimum of a function by moving in the negative direction of the gradient of a function.
 

@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-09-2024 | 10:27 PM
+Last Updated: 03-10-2024 | 12:36 noon
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -83,8 +83,8 @@ The rows or `m` is equal to the total number of samples (digits) in our dataset
 The columns or `n` is equal to the total number of pixel values in our dataset.
 
 `m` will allow us to 
-- Average the gradient of the loss with respect to our weights and biases over all samples, `m` which will allow for our model to learn as it's fed more digits.
-- Compute the average loss using [[categorical cross entropy]] per samples `m`.
+- Average the gradient of the [[loss]] with respect to our weights and biases over all samples, `m` which will allow for our model to learn as it's fed more digits.
+- Compute the average [[loss]] using [[categorical cross entropy]] per samples `m`.
 
 `n` will allow us to
 - Split our training data and our labels from our NumPy array.
@@ -279,17 +279,88 @@ def cat_cross_entropy(one_hot_Y, a2 ):
 
 It calculates the [[loss]] between the predicted probability and a true value by taking the logarithm of the predicted probability and multiplying it by a true value. 
 
-It's calculated by $y_i·log(\hat{y_i})$, where $y_i$ is the true value and $\hat{y}_i$ is the predicted probability for $ith$ class of a dataset.
+It's calculated by $y_k·log(\hat{y_k})$, where $y_k$ is the true value and $\hat{y}_k$ is the predicted probability for $kth$ class of a dataset.
 
 In our network, we'll want to calculate the total loss of our network over all neurons / classes. So what we do is apply a summation over all $i$ classes in our dataset.
 
-The final equation will be $CCE = -\sum_{i=1}^{N}y_i·log(\hat{y}_i)$, where $N$ is the total classes in our dataset.
+The final equation will be $CCE = -\sum_{k=1}^{K}y_k·log(\hat{y}_k)$, where $N$ is the total classes in our dataset.
 
 This is represented by `-np.sum(one_hot_Y * np.log(a2))` in NumPy.
 
 We divide this over `m` in order to get the average loss over the total samples in our dataset.
 
-cool ;)
+**Finally, we can define our function for [[backpropagation]].** 
+
+For a little more context, backpropagation is the process where we take the gradients (derivatives) of a loss function with respect to a specific parameter (a weight or bias) or output in order to minimize the value of the gradient through an optimization algorithm such as [[gradient descent]].
+
+Minimizing the gradient of the loss function to near 0 indicates that the loss of our neural network is near 0. This is exactly what we want for an increased accuracy.
+
+In context of [[gradient descent]], let's say our loss function is in the form of a parabola.
+
+(for an intuitive understanding)
+
+We begin with an initial value, at the left of the parabola.
+
+![[gradientdescent1.png|500]]
+The goal here is to iteratively minimize the tangent of the value.
+
+After the first iteration of [[gradient descent]], our value and parabola might look like this:
+![[gradientdescent2.png | 500]]
+The tangent of the value has decreased. As you might've deduced, we ultimately want the value to reach the trough of the parabola where the tangent is 0.
+
+![[gradientdescent3.png|It's rare to see an optimal value, there will often always be a loss|500]]
+
+This process is repeated iteratively for all $i$ neurons over all $l$ layers through the process of [[backpropagation]].
+
+> *It involves some pretty dense mathematics, which we'll go into*
+
+```
+def back_prop(z1, a1, z2, a2, w1, w2, X, Y):
+	one_hot_Y = one_hot(Y)
+	dz2 = a2 - one_hot_Y
+	dw2 = dz2.dot(a1.T) * 1/m
+	db2 = np.sum(dz2) * 1/m
+	dz1 = relu_deriv(z1) * w2.T.dot(dz2)
+	dw1 = dz1.dot(X.T) * 1/m
+	db1 = np.sum(dz1) * 1/m
+	return dw1, db1, dw2, db2
+```
+
+We run our `one_hot()` function to apply [[one-hot encoding]] to our labels.
+
+Now we calculate the derivative of the loss w.r.t to the weighted sum of the output layer by subtracting `a2 - one_hot_Y`.
+
+Mathematically, the full equation (using chain rule) looks like this:
+
+$\frac{∂C}{∂z_{2}}= (\frac{∂C}{∂a_2})(\frac{∂a_2}{∂z_2})$
+
+This can be simplified as $\frac{∂C}{∂z_{2}}=a_{2}-\hat{y_k}$, where
+- $C$ is the loss function
+- $z_2$ is the weighted sum of the output layer
+- $a_2$ is the activation output of the output layer
+- $\hat{y_k}$ is the [[one-hot encoding]] of a label corresponding to the $kth$ class of our dataset
+
+> *Check out the full derivation [here](https://shivammehta25.github.io/posts/deriving-categorical-cross-entropy-and-softmax/)*
+
+Now that we've calculating `dz2`, we can calculate the derivative of the loss function with respect to our weights at the output layer, `w2`, through,
+
+$\frac{∂C}{∂w_{2}}=(\frac{∂C}{∂z_2})(\frac{∂z_2}{∂w_2})$.
+
+Note, we don't explicitly calculate $\frac{∂C}{∂a_2}$ as it's already done in the previous calculation of $\frac{∂C}{∂z_2}$.
+
+This effectively outputs the [[loss]] for each weight at the output layer which will be extremely useful for the [[gradient descent]].
+
+We can defined this as `dz2.dot(a1.T)`where,
+- `dz1` is $\frac{∂C}{∂z_2}$
+- `a1.T` is $\frac{∂z_2}{∂w_2}$
+
+$\frac{∂z_2}{∂w_2}$ is equivalent to the transposition of `a1`
+
+
+
+(find me)
+
+
 ---
 
 The initial parameters, [[weight]] and [[bias]], for our function alongside the number of neurons are defined.
@@ -515,3 +586,4 @@ Now `db1`, similar to `db2` can be calculated as the sum of `dz1`,
 $\frac{∂C_o}{∂b_1}=\sum_{i=1}^{32}\frac{∂C_o}{∂z_1}$
 
 over a total of $32$ neurons in the hidden layer.
+

@@ -1,5 +1,5 @@
 ---
-Last Updated: 02-24-2024 | 8:35 PM
+Last Updated: 03-10-2024 | 10:34 AM
 ---
 Unless specified otherwise, these are the defined variables that will be used in this database.
 
@@ -12,3 +12,5 @@ Unless specified otherwise, these are the defined variables that will be used in
 - $a_i$ is the weighted sum of a neuron $i$ at layer $l$
 - $z_{j}$ is the weighted sum of a neuron $j$ at previous layer $l-1$
 - $z_{ji}$ is the weighted sum of a neuron $i$ at layer $l$
+- $k$ is the index of $kth$ class of a dataset
+- $K$ is the total number of classes in a dataset
