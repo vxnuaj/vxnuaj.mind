@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-10-2024 | 2:40 PM
+Last Updated: 03-10-2024 | 9:44 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -450,238 +450,111 @@ Through the function, `np.argmax()`, we get the maximum value of vector `a2`, to
 Now we define the function which will dynamically compute the accuracy of our model and print 
 
 ```
-def accuracy()
+def accuracy(predictions, Y)
+	acc = np.sum(predictions == Y) / Y.size
+	return acc
 ```
 
+We take the summation of total predictions that is equal to a label `Y`. This essentially acts as a mechanism, checking if a prediction is correct and then adding it to a summation. 
 
+We divide this over the total size of labels `Y` to get the final accuracy value, `acc`.
 
-
-(find me)
-
----
-
-The initial parameters, [[weight]] and [[bias]], for our function alongside the number of neurons are defined.
-
-Our network will have an input layer of `784` Neurons, as each image within the MNIST dataset consists of `784` pixels, in a 28 by 28 pixel grid.
-
-![[MNIST Sample.png| Images just like these]]
-
-It will have a hidden layer of `32` neurons. So, hence `W1`, it represents the [[weighted matrix]] of the [[hidden layer]] taking in `784` input neurons and outputting `32` values from it's `32` neurons.
-
-A [[bias]] vector, `b1` is created of a length of `784` to accommodate for each `784` neuron. Each [[bias]] will be added to the multiplication of [[weight]] $W_i$ and output $x_i$, where $i$ is the $ith$ neuron, as part of the [[weighted sum]] calculation.
-
-The output layer will take in `32` values from the previous `32` neurons. It will consist of `10` neurons, outputting `10` final values. `W2` is defined according to those parameters.
-
-A [[bias]] vector, `b2`, is created this time with a length of `32` to accommodate for the `32` neurons in the output layer.
-
-We create the [[bias]] using `np.zeros` just as a means of initializing the model parameters. It will change as we train out network.
-
-The same concept is done with the [[weight]]s, instead using `np.random.rand`
-
-Prior to defining the forward function, we define our [[activation function]]s.
-We'll be using [[ReLU]] and [[SoftMax]].
+Finally, we can define the final function which will ultimately perform [[gradient descent]], allowing for us to iteratively train our neural network for an increased accuracy.
 
 ```
-def relu(z):
-    return np.maximum(z,0)
-
-def softmax(z
-	z -= np.max(z)
-    return (np.exp(x)/np.exp(x).sum())
+def gradient_descent(X, Y, alpha, iterations):
+	model_filename = 'models/mnistnn.pkl'
+	try:
+		w1, b1, w2, b2 = load_model(model_filename)
+		print("Loaded model from:", model_filename)
+	except FileNotFoundError:
+		print("Model not found. Initializing new model!")
+		w1, b1, w2, b2 = init_params()
+		
+	for i in range(iterations):
+		z1, a1, z2, a2 = forward(w1, b1, w2, b2, X)
+		dw1, db1, dw2, db2 = back_prop(z1, a1, z2, a2, w1, w2, X, Y)
+		w1, b1, w2, b2 = update_params(w1, b1, w2, b2, dw1, db1, dw2, db2, alpha )
+		if i % 10 == 0:
+			loss = cat_cross_entropy(one_hot(Y), a2)
+			acc = accuracy(predictions, Y)
+			print("Iteration: ", i)
+			print("Accuracy:", acc)
+			print("Loss:", loss)
+			print(f"Predictions: {predictions} | True Vals: {Y}")
+		
+	return w1, b1, w2, b2 
 ```
 
-In NumPy, the ReLU activation function can be defined by using the np.maximum function, with parameters `z,0`.
+`iterations` is the total number of times we feed our dataset into our network for training and `alpha` is the learning rate which defines how big of a step our model takes when training through [[gradient descent]].
 
-The SoftMax function can be defined through the equation $\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}$, which is what `np.exp(x)/np.exp(x).sum()` defines
+You might recall alpha $(\upalpha)$ being used in the update rule for [[gradient descent]] 
 
-Now, the forward function can be defined.
+$\uptheta = \uptheta - \upalpha*\frac{∂C}{∂\uptheta}$
 
-```
-def forward(w1, b1, w2, b2, X):
-    z1 = np.dot(w1,X) + b1.reshape(-1,1) 
-    a1 = relu(z1)
-    z2 = np.dot(w2, a1) + b2.reshape(-1,1)
-    a2 = softmax(z2)
-	return z1, a1, z2, a2
-```
+Mathematically, that's how alpha is used in a deep learning model.
 
-Here, `z1`, the [[weighted sum]] of each neuron in the first layer, is computed by taking the dot product of [[weighted matrix]] `W1` and `X` which represents the original input of `784` pixels.
+Now first off, we attempt to load a previously trained model. If one has been trained previously and exists in our directory, we print `Loaded model from: mnistnn.pkl`.
 
-Afterward, `A1`, the final output(s) of the 1st layer, is calculated by applying our [[ReLU]] activation function onto the [[weighted sum]] `Z1`.
+Otherwise, we print `Model not found. Initializing new model!` and initialize our parameters, `w1, b1, w2, b2` through our `init_params()` function.
 
-`z2`, the [[weighted sum]] of each neuron in the second layer is computed as the dot product of [[weighted matrix]], `W2`, and `A1`. 
+Now, to define the main structure of this function, we want our `forward()`, `back_prop()`, and `update_params()` functions to be executed `i` times, according to the range in the total `iterations` that will be defined once the `gradient_descent` function is ran.
 
-We get our final output, `A2` by applying non-linearity to `z2` through the [[SoftMax]] [[activation function]].
+Now for every $i$ in the range, `iterations`, when the remainder of $i$ divided by 10 is equal to 0, we run:
 
-Now the dataset will be taken and through [[one-hot encoding]], will be transformed into numerical data of vectors of 0s and 1s.
+- `cat_cross_entropy()` to get the average loss up to $ith$ iteration
+-  `get_pred()` to get the prediction of our model to be used in `accuracy()`
+- `accuracy()` to get the average accuracy up to $ith$ iteration
 
-This is done in order to allow for our [[neural network]] to interpret the dataset.
+Finally, we print the current iteration, [[loss]], accuracy, and predictions / true values.
 
-```
-def one_hot(Y):
-    one_hot_Y = np.zeros((Y.size, Y.max() + 1))
-    one_hot_Y[np.arange(Y.size), Y] = 1
-    one_hot_Y = one_hot_Y.T
-    return one_hot_Y
-```
+This is only printed when the remainder of $i$ is 0 as this allows us to visualize the training of our model per every 10th iteration.
 
-Within the function `one_hot()`, we'll take in the training labels `Y_train`. 
-
-We create NumPy array filled with 0s with a dimensionality of `(Y.size, Y.max() + 1)`, where `Y.size` is the total # of labels in our training set defining the total # of digits in our MNIST training set. `Y.max()`, defines the largest value of our training set `Y`, which in the case of MNIST database, is 9.
-
-Now in the MNIST dataset, 0-9 accounts for `10` digits, if you count 0.
-Therefore, we must `+1` to `Y.max()` in order to ensure that our array will account for all digits in the MNIST dataset.
-
-Our NumPy array of 0s will have the dimensionality of `(60000, 10)`, as our dataset holds `60000` digits ranging from 0 to `9`.
-
-Now, using `np.arange` we create an array of length `Y.size`, which in our case, will be `60000`, as our training set holds `60000` digits. It holds values ranging from 0 to 60000.
-
-Like this: $[0,1, 2, 3, ... 59998, 59999, 60000]$
-
-Our `one_hot_y` array of `np.zeros` will be indexed using `np.arange(Y.size)` and `Y`. 
-
-Essentially, what we're doing is for every value $i$ in `np.arange(Y.size)`, we take $i$ and the label `Y`, index our `one_hot_Y` array, and assign that specific indice `0` to `1`.
-
-The value `Y` is dependent on which image is fed into the network.
-If we feed in an image that represents the digit 5, `Y` will be 5, representing the 5th indice of label array `Y`, $[0,1,2,3,4,|5|,6,7,8,9,]$
-
-So if we ran this function for the first 5 digits in the MNIST dataset,
-
-$[5]$
-$[0]$
-$[4]$
-$[1]$
-$[9]$
-
-our `one_hot_y` encoded array would look something like this:
-
-$[0,0,0,0,1,0,0,0,0,0]$
-$[1,0,0,0,0,0,0,0,0,0]$
-$[0,0,0,0,1,0,0,0,0,0]$
-$[0,1,0,0,0,0,0,0,0,0]$
-$[0,0,0,0,0,0,0,0,0,1]$
-
-Then our `one_hot_y` array is transposed per `np.T`, and our function returns the `one_hot_y`.
-
-Afterwards, the [[loss function]] [[categorical cross entropy]] is defined. This [[loss function]] is made specifically for multi-class classification tasks where each input belongs exactly to a single class.
-
-The equation of [[categorical cross entropy]] is defined as:
-
-$CE = -\sum_{i=1}^{N}y_{i}·log(\hat{y_i})$
-
- - $\hat{y}_i$ is the predicted probability for $ith$ class in the dataset given by the model
-- $y_i$ represents the one hot encoded vector for $ith$ class label
-- Index $i$ denotes the index of the $ith$ class of a dataset
-- $N$ denotes the total number of classes in the dataset / [[one-hot encoding]] vector.
-
-Therefore, we implement it in our code as,
+Now finally, our model will be trained by running the `gradient_descent()` function.
 
 ```
-def cat_cross_entropy()
-    CE = -np.sum(one_hot_Y * np.log(a2))
-    return CE
+w1, b1, w2, b2 = gradient_descent(X_train, Y_train, .1, 500)
+save_model(w1, b1, w2, b2, 'models/mnistnn.pkl')
 ```
 
-We define the derivative of [[ReLU]], which for all numbers greater than 0, it's equal to 1 given that ReLU is linear when x > 0.
+We define the learning rate at `.1` and the total iterations as `500`.
+This effectively trains our model over `500` iterations through our dataset.
+
+The model is then saved onto `mnistnn.pkl` using the `save_model()` function. 
+This will allow us to load and continue training the model past `500` iterations if needed.
+
+Here are my outputs / metrics per every 100th iteration when I first trained the model!
 
 ```
-def relu_deriv(z)
-	return (z>0).astype(int)
+Iteration:  0
+Accuracy: 0.09158333333333334
+Loss: 3.918500600350083
+[1 7 0 ... 9 0 1] [3 2 9 ... 9 5 2]
+
+Iteration:  100
+Accuracy: 0.7534333333333333
+Loss: 0.7623425461001313
+[1 2 9 ... 9 9 2] [3 2 9 ... 9 5 2]
+
+Iteration:  200
+Accuracy: 0.8235
+Loss: 0.5627834257539484
+[3 2 9 ... 9 5 2] [3 2 9 ... 9 5 2]
+
+Iteration:  300
+Accuracy: 0.8519
+Loss: 0.48099627297439296
+[3 2 9 ... 9 5 2] [3 2 9 ... 9 5 2]
+
+Iteration:  400
+Accuracy: 0.8686833333333334
+Loss: 0.4330374059050395
+[3 2 9 ... 9 5 2] [3 2 9 ... 9 5 2]
+
+Iteration:  490
+Accuracy: 0.8785
+Loss: 0.40271510565759355
+[3 2 9 ... 9 5 2] [3 2 9 ... 9 5 2]
 ```
 
-So the derivative can be simply returned as `z>0`, with `.astype(int)` to ensure that it returns as an integer value, not a boolean value.
-
-Now, we can define our [[backpropagation]] function,
-
-```
-def back_prop(z1, a1, z2, a2, w2, X, Y ):
-	one_hot_Y = one_hot(Y)
-	dz2 = a2 - one_hot_Y
-	dw2 = np.dot(dz2, a1.T)
-	db2 = np.sum(dz2, axis = 1, keepdims=True)
-	dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2))
-	dw1 = np.dot(dz1, X.T)
-	db1 = np.sum(dz1, axis = 1, keepdims=True)
-	return dw1, db1, dw2, db2
-```
-
-Through our [[one-hot encoding]] function, we encode data labels `Y`, & it set equal to `one_hot_Y`. 
-
-The `one_hot_Y` encoded vector is used to calculate the derivative `dz2` by subtracting `a2` by the `one_hot_Y`.
-
-To break down the math,
-
-- $C_o$ is our loss function, [[categorical cross entropy]].
-- $w_2$ / `w2` is the weight which connects our hidden layer to the output layer.
-- $z_2$ / `z2` is the weighted sum from our hidden layer being fed as an input to the output layer through activation function $a_2$.
-- $\hat{y}$ is the one hot encoded vector.
-- $l$ is the $lth$ layer in range $0≤l≤2$. (If $j = l$, we are at the 1st hidden layer.)
-- $m$ is each neuron in the output layer
-- $n$ is each neuron in the input layer
-
-Given that we're implementing the [[categorical cross entropy]], the derivative of `z2`, `dz2`, can be calculated by, `a2 - one_hot_y`.
-
-$\frac{∂C_{o}}{∂z_2} = a_{2}- \hat{y}$ 
-
-> *Check out the full derivation [here](https://towardsdatascience.com/derivative-of-the-softmax-function-and-the-categorical-cross-entropy-loss-ffceefc081d1)*
-
-This indicates that a change to the gradient of the loss function, $C_o$, with respect to weighted sum, $z_2$, can be induced from a change in the activation output $a_2$.
-
-Ultimately, the calculation results in `dz2` being a matrix that contains the gradient of the loss with respect to the weighted sum `dz2`, where each row represents individual training samples and each column is each individual neuron (10) in the output layer.
-
-It has a dimensionality of $(samples, 10)$.
-
-Then, `dw2` is the dot product of `dz2` and `a1.T`, essentially being the gradient of the loss function with respect to weight `w2`.
-
-$\frac{∂C_o}{∂w_{2}}= (\frac{∂a_2}{∂z_2})(\frac{∂z_2}{∂w_2})$
-
-The $\frac{∂z_2}{∂w_2}$, can simply be rewritten as the transposed $a_1$, as $a^{T}_{1}$,
-
-$\frac{∂C_o}{∂w_{2}}= (\frac{∂a_2}{∂z_2})a^{T}_1$
-
-Given that we know $\frac{∂a_2}{∂z_2}$ is equal to $a_{2}- \hat{y}$, we can rewrite our equation as,
-
-$\frac{∂C_o}{∂w_{2}}= (a_2-\hat{y})a^{T}_1$
-
-indicating that any change in $a_2$ will also ultimately affect the gradient of loss function $C_o$ with respect to $w_2$.
-
-Given that `dz2` has a dimensionality of $(samples, 10)$ and the transposed `a1` has a dimensionality of $(samples, 32)$, we end up with the matrix `dw2` of a dimensionality of $(32, 10)$, where $32$ are the neurons in the hidden layer and $10$ are the neurons in the output layer. 
-
-Ultimately `dw2` / $\frac{∂C_o}{∂w_2}$ defines a matrix of the gradients of the [[loss function]] with respect to [[weight]] $w_2$ for each and every connection between each neuron $m$ and $n$
-
-The output `dw2` is then a matrix, of dimensions $(n,m)$ where $n$ is the number of neurons in the output layer and $m$ is the number of neurons in the input layer.
-
-To compute `db2`, the derivative of the loss function with respect to the bias in a neuron $n$, we can take the sum of `dz2` on the first axis. Meaning, we sum up the gradients of the loss function with respect to the [[weighted sum]] of the 10 neurons, $n$.
-
-Mathematically, this can be defined as,
-
-$\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})(\frac{∂z_2}{∂b_2})$
-
-Given that the bias, `b2` isn't part of a multiplication with the activation function, $a_2$, we don't need to take the gradient of the loss w.r.t `a2`, we can instead directly calculate $(\frac{∂C_0}{∂z_2})$.
-
-Since the derivative of a variable with respect to itself is 1,
-
-$\frac{∂C_o}{∂b_{2}}=(\frac{∂C_0}{∂z_2})1$
-
-This is summed up over all 10 neurons in the output layer,
-
-$\frac{∂C_o}{∂b_{2}}=\sum_{i = 1}^{10}(\frac{∂C_0}{∂z_2})$
-
-The same bias is defined per layer, for each and every neuron, therefore the summation of gradient of the loss w.r.t to `z2` over every neuron, is used to calculate `db2`.
-
-To calculate the gradient of the loss with respect to the weighted sum of the first layer, `dz1`, we can multiply the gradient of activation function output, ReLU(z1) / `a1`, with the dot product of `w2.T` and `dz2`.
-
-Mathematically, `dz1 = relu_deriv(z1) * (np.dot(w2.T, dz2))` looks like this:
-
-$\frac{∂C_0}{∂z_{1}} = (\frac{∂a_1}{∂z_{1}})(\frac{∂z_2}{∂a_1})(\frac{∂C_0}{∂z_2})$.
-
-The gradient of the loss w.r.t to the weight in the hidden layer. `dw1` can be calculated by taking the dot product of `dz1` and the transposed inputs, `X.T`. Mathematically it looks like this:
-
-$\frac{∂C_o}{∂w_{1}}= (\frac{∂C_0}{∂a_1})(\frac{∂a_1}{∂z_1})(\frac{∂z_1}{∂w_1})$
-
-Now `db1`, similar to `db2` can be calculated as the sum of `dz1`,
-
-$\frac{∂C_o}{∂b_1}=\sum_{i=1}^{32}\frac{∂C_o}{∂z_1}$
-
-over a total of $32$ neurons in the hidden layer.
-
+By the final iteration, we achieve an accuracy of .88%.
