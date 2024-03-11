@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-10-2024 | 9:44 PM
+Last Updated: 03-10-2024 | 10:43 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -8,7 +8,7 @@ MNIST training set consists of handwritten digits with a dimensionality of 28 by
 
 This is what a set of handwritten MNIST digits look like:
 
-![[Screenshot 2024-03-07 at 2.09.02 PM.png|300]]
+![[Screenshot 2024-03-07 at 2.09.02 PM.png|500]]
 
 Our dataset holds a total of 60,000 digits for training our model and 10,000 digits for testing our model.
 
@@ -21,6 +21,8 @@ The **Input Layer** will take in `784` datapoints, representing a pixel value fr
 The **Hidden Layer** will take in the fed-forward `784` datapoints into it's `32` neurons and output `32` values.
 
 The **Output Layer** will take in the `32` output values from the hidden layer into it's `10` neurons and output `10` activation values, of which the neuron with the highest activation value will correspond to the networks final digit prediction
+
+#### Training the Model
 
 We import the dependencies for our program
 
@@ -150,9 +152,7 @@ def relu(z): #ReLU
 	return np.maximum(z,0) # np.maximum(z,0) is ReLU
 
 def softmax(z): #Softmax
-	z -= np.max(z)
-	A = np.exp(z)/ np.sum(np.exp(z))
-	return A
+    return np.exp(z)/ sum(np.exp(z))
 ```
 
 Mathematically, [[ReLU]] is simply defined as $f(z) = max(0,z)$, where $z$ is the input weighted sum for a given neuron. In NumPy, this can simply be expressed as `np.maximum(z,0)`
@@ -165,8 +165,6 @@ Now [[SoftMax]], which will be used for our output layer to compute probabilitie
   In our case, $K$ is $10$, as our model has $10$ classes ranging from 0-9
 
 In NumPy, this function can be expressed as `np.exp(z)/np.sum(np.exp(z))`.
-
- `z -= np.max(z)` subtracts the maximum value in matrix `z`. This prevents numerical overflow and will mitigate any possible nan values we might get in our loss function.
 
 Now, we can begin to define our forward function, which will allow us to feed our data through our network, applying the initialized [[weight]] and [[bias]]es, to calculate the [[weighted sum]]s and the activation outputs.
 
@@ -558,3 +556,120 @@ Loss: 0.40271510565759355
 ```
 
 By the final iteration, we achieve an accuracy of .88%.
+
+#### Testing the Model
+
+To see the model in action, we can simply run a single sample of the MNIST dataset through the network.
+
+I'll be doing so in a new `.py` file.
+
+First, just like always, import dependence!
+
+```
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+
+from mnistmodel import load_model, get_pred
+```
+
+Per usual, just as before, we import NumPy and Pandas. Though this time, we import the `pyplot` module from matplotlib to allow for us to visualize the output of our network.
+
+We also import the `load_model` and the `get_pred` functions from the file that holds the code for our model, `mnistmodel`.
+
+We'll be using the `load_model` to load our trained model and `get_pred` to get the prediction from our model for visualization and testing.
+
+Now, we can load our MNIST test data and pre-process it.
+
+```
+test_data = pd.read_csv(MNIST CSV archive/mnist_test.csv)
+test_data = np.array(test_data)
+m, n = test_data.shape # 10000, 784
+
+test_data = [0:m].T
+Y_test = test_data[0]
+X_test = test_data[1:n]
+X_test = X_test / 255
+```
+
+Just as before we load the `.csv` file and turn it into a NumPy array. We set `m` to be the rows of the dataset, 10000, and `n` to be the columns of the dataset, 784.
+
+We then transpose our `test_data` array / matrix over all 10000 columns `m`.
+Now, each column of our dataset represents each digit rather than each row.
+
+Then we take the first column at index `0` of our `test_data`, which represents the labels of each digit sample, and assign it to `Y_test`.
+
+The rest of the columns in `test_data`, from `1:n` are assigned to `X_test` which is then normalized to a decimal between 0 and 1 through dividing over `255`.
+
+Now, we can load our model.
+
+```
+nn = 'models/mnistnn.pkl'
+w1, b1, w2, b2 = load_model(nn)
+```
+
+We define our file path as `nn` and input it into the `load_model()` function which returns the trained parameters, `w1, b1, w2, b2`.
+
+Now we can define the function that will take our neural network to output a prediction.
+
+```
+def make_pred(w1, b1, w2, b2, X, index):
+	_, _, _, a2 = forward(w1, b1, w2, b2, X)
+	prediction = get_pred(a2)
+	prediction = prediction[index]
+	true_digit = Y_test[index]
+	print(f'Prediction: {prediction}')
+	print(f"True Digit: {true_digit}")
+	digit = X_test[:, index]
+	digit = digit.reshape((28, 28)) * 255
+	plt.gray()
+	plt.imshow(digit)
+	plt.show()
+	return
+```
+
+We input our parameters alongside our test data into the `forward()` function to get the activation output `a2`.
+
+The `get_pred()` function is used to get the `prediction` of the highest probability. 
+
+This `prediction` is indexed using the `i` value, which will be input in to the `make_pred()` function when it is called.
+
+This essentially gets the prediction for the specific digit at index $i$ that we're feeding to our network.
+
+In order to test this predicted value against the true value, we can index our labels, `Y_test`, with the index, `i`.
+
+This gets the true label, `true_digit` for our input digit sample.
+
+Both, the `prediction` and the `true_digit` are printed onto the terminal.
+
+We're also going to add the ability to visualize the specific digit at index $i$ by using the `pyplot` module.
+
+We index our test data, `X_test` at all rows and column index, `i`, to get the specific pixel values for the digit at index `i`.
+
+The shape of this sliced array is `784, 1` where `784` is the total pixel values for a digit.
+
+To process this array for visualization we can simply reshape this array into a `28, 28` array. Once reshaping, we multiply by `255` in order to convert the normalized pixel values back to their original values.
+
+Now, we generate the `pyplot` of our digit using `plt.gray(), plt.imshow(), and plt.show()`.
+
+Let's test our model on the first value in our test set, at index `0`. 
+
+This happens to be the digit 7.
+
+```
+prediction = make_pred(w1, b1, w2, b2, X_test, 0)
+```
+
+As the output, in the terminal I get:
+
+```
+Prediction: 7
+True Digit: 7
+```
+
+and in the generated `pyplot`:
+
+![[Screenshot 2024-03-10 at 10.31.40 PM.png| yep |300]]
+
+
+*That is how you build a neural network to classify the MNIST digits from scratch, using only NumPy*
