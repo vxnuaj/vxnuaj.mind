@@ -1,6 +1,6 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-10-2024 | 10:43 PM
+Last Updated: 03-11-2024 | 2:07 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
@@ -57,7 +57,8 @@ The `load_model` function does a similar job, but instead of saving the model pa
 Given that the MNIST dataset within our directory in csv format, we use the `pd.read_csv`function to access data from the csv file and upload it as a pandas DataFrame.
 
 ```
-train_data = pd.read_csv("../MNIST CSV archive/mnist_train.csv")
+train_data = pd.read_csv("MNIST CSV archive/mnist_train.csv")
+## if in a jupyter notebook - ("../MNIST CSV archive/mnist_train.csv")
 train_data.head(5) ## Optional if in Jupyter Notebook.
 ```
 
@@ -79,7 +80,7 @@ np.random.shuffle(train_data)
 
 We turn our DataFrame into a NumPy array which will allow us to perform mathematical operations on our dataset.
 
-The rows of our NumPy array, `train_data`, is assigned to variable `m` and the columns are assigned to variable `n`. 
+The rows of the NumPy array, `train_data`, is assigned to variable `m` and the columns are assigned to variable `n`. 
 
 The rows or `m` is equal to the total number of samples (digits) in our dataset
 The columns or `n` is equal to the total number of pixel values in our dataset.
@@ -108,7 +109,7 @@ Our labels, now located in the first row of our dataset (given that we transpose
 
 The pixel values of each individual digit in the dataset will be accessed by indexing `train_data` from row `1` to `n` samples. We assign the training data to `X_train`. 
 
-Afterward, we normalize our datapoints to between the range 0-1 by diving `X_train` by `255`. This will allow for our model to more effectively compute a prediction by applying its parameters through a [[weighted sum]] & [[activation function]] and then learn faster through [[backpropagation]] and [[gradient descent]]. 
+Afterward, we normalize our datapoints to between the range 0-1 by dividing `X_train` by `255`. This will allow for our model to more effectively compute a prediction by applying its parameters through a [[weighted sum]] & an [[activation function]] to then learn faster through [[backpropagation]] and [[gradient descent]]. 
 
 If in a Jupyter notebook, you can check the total size of our labels, `Y_train`, by running,
 
@@ -141,7 +142,7 @@ We will initialize our first weights matrix, `w1` by creating a random array of 
 
 Our first [[bias]] matrix, `b1` will be initialized using `np.zeros`, creating a matrix of 0s, with a dimensionality of `32` rows and `1` column. The `32` represents each input neuron in our first hidden layer. We only use 1 column as we only need `32` bias parameters for each neuron, nothing more.
 
-Our second [[weight]] matrix `w2` will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
+Our second [[weight]] matrix, `w2`, will be a dimensionality of `10,32`, initialized using `np.random.rand`, to again create a random array of floats. `10` represents the `10` neurons in the output layer and `32` represents the `32` inputs from the `32` neurons in the hidden layer to the output layer.
 
 The second [[bias]] matrix, `b2` will be another matrix of `np.zeros`, with a dimensionality of `10` rows and `1` column. `10` being the total number of bias values we only. `1` column as we only need a total of `10` bias values.
 
@@ -155,12 +156,12 @@ def softmax(z): #Softmax
     return np.exp(z)/ sum(np.exp(z))
 ```
 
-Mathematically, [[ReLU]] is simply defined as $f(z) = max(0,z)$, where $z$ is the input weighted sum for a given neuron. In NumPy, this can simply be expressed as `np.maximum(z,0)`
+Mathematically, [[ReLU]] is simply defined as $f(z) = max(0,z)$ where $z$ is the input weighted sum for a given neuron. In NumPy, this can simply be expressed as `np.maximum(z,0)`
 
 Now [[SoftMax]], which will be used for our output layer to compute probabilities per output neuron, is a little more mathematically complex. 
 
-[[SoftMax]] can be defined as $\hat y_{i}=\frac{e^{z_i}}{\sum_{j=1}^{K}e^{z_j}}$, where 
-- $i$ is the $ith$ output of the final layer, dependent on the number of neurons in the final layer. 
+[[SoftMax]] can be defined as $\hat y_{i}=\frac{e^{z_i}}{\sum_{j=1}^{K}e^{z_j}}$ where 
+- $i$ is the $ith$ output of the final layer, dependent on the number of neurons in the final layer. -
 - $j$ is the index for the total number of classes, $K$, in a dataset. 
   In our case, $K$ is $10$, as our model has $10$ classes ranging from 0-9
 
@@ -196,7 +197,7 @@ In our code, `w1` represents the initialized matrix of weights with a dimensiona
 
 The product of this operation will result in a final matrix, `z1` which contains the weighted sums of the hidden layer at each of the 32 neurons.
 
-Now, we apply the [[ReLU]] activation function, $f(z) = max(0,z)$, through our defined function `relu(z)`, by taking in `z1` as its input. The resulting output is the activation matrix which holds an activation value each of the `32` neurons.
+Then, we apply the [[ReLU]] activation function, $f(z) = max(0,z)$, through our defined function `relu(z)`, by taking in `z1` as its input. The resulting output is the activation matrix which holds an activation value each of the `32` neurons.
 
 To calculate `z2`, the [[logits]] / [[weighted sum]] of the output layer, we do the same [[weighted sum]] calculation where we multiply by the input, this time `a1` representing the output of the hidden layer, by the weighted matrix `w2`. 
 
@@ -284,7 +285,7 @@ It's calculated by $y_k·log(\hat{y_k})$, where $y_k$ is the true value and $\ha
 
 In our network, we'll want to calculate the total loss of our network over all neurons / classes. So what we do is apply a summation over all $i$ classes in our dataset.
 
-The final equation will be $CCE = -\sum_{k=1}^{K}y_k·log(\hat{y}_k)$, where $N$ is the total classes in our dataset.
+The final equation will be $CCE = -\sum_{k=1}^{K}y_k·log(\hat{y}_k)$, where $K$ is the total classes in our dataset.
 
 This is represented by `-np.sum(one_hot_Y * np.log(a2))` in NumPy.
 
