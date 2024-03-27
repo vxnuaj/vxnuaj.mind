@@ -1,5 +1,5 @@
 ---
-Last Updated: 02-21-2024 | 9:15 PM
+Last Updated: 03-27-2024 | 12:34 midnight
 ---
 An optimization algorithm is an algorithm used to train [[deep learning]] models, allowing for the updating of the model parameters, applied element-wise, to minimize the value of the [[loss function]] through [[backpropagation]].
 
@@ -10,4 +10,3 @@ Choosing the appropriate optimization algorithm is important as it can directly 
 **Optimization algorithms:**
 - [[gradient descent]]
 - [[stochastic gradient descent]]
-- [[Adam]]
