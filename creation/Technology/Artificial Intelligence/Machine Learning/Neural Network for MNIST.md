@@ -1,10 +1,10 @@
 ---
 created: 2024-02-19T10:40
-Last Updated: 03-11-2024 | 2:07 PM
+Last Updated: 03-26-2024 | 10:31 PM
 ---
 We will be building a neural network to classify digits from the MNIST dataset.
 
-MNIST training set consists of handwritten digits with a dimensionality of 28 by 28  pixels, amounting to a total of 784 pixel values. Each numerical pixel value ranges from 0 to 255, with 0 representing black and 255 representing white.
+MNIST training set consists of handwritten digits with a dimensionality of 28 by 28 pixels, amounting to a total of 784 pixel values. Each numerical pixel value ranges from 0 to 255, with 0 representing black and 255 representing white.
 
 This is what a set of handwritten MNIST digits look like:
 
